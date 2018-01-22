@@ -1,0 +1,209 @@
+{extend name="./layout/site_layout" /}
+{block name="css"}
+	<link rel="stylesheet" type="text/css" href="/bnb_js/hotel-datepicker.css">
+	<script type="text/javascript" src="/bnb_js/fecha.js"></script>
+	<script type="text/javascript" src="/bnb_js/hotel-datepicker.js"></script>
+{/block}
+{block name="content"}
+	<div class="xingcheng_list mb10" style="margin-top: 1px;">
+		<div class="img_left">
+			<img src="/bnb_imgs/temp_01.png">
+		</div>
+		<div class="content_right">
+			<div style="width: 100%;">
+				<h3>{$bnbData.name}</h3>
+			</div>
+			<p>宜居{$bnbData.room_people}人</p>
+			<div style="width: 100%;">
+				<p>
+					<span class="fs-16 fw gray-fc2">{if $price['min_price'] >0 }￥{$price['min_price']}元起{/if}</span>
+				</p>
+			</div>
+		</div>
+	</div>
+	<p class="fs-16 black-fc p10 tc">预订日期</p>
+	<div class="yuding_box" style="position:relative;">
+		<div class="select-time">
+			<ul class="mui-row">
+				<li class="mui-col-xs-6 tc">
+					<div class="p10">
+						<span id="indate-span">入住日期</span></br>
+						<span class="time in_date_time fw yellow-fc fs-20"></span>
+					</div>
+				</li>
+				<li class="mui-col-xs-6 tc">
+					<div class="p10">
+						<span id="outdate-span">离开日期</span></br>
+						<span class="time out_date_time fw yellow-fc fs-20"></span>
+					</div>
+				</li>
+			</ul>
+			<input type="hidden" name="hotel_date" id="hotel_date" value="">
+		</div>
+	</div>
+	<p class="fs-16 black-fc p10 tc">入住人数</p>
+	<div class="yuding_box">
+		<div class="mui-row pt10 pb10 pl15 pr15">
+			{for start="0" end="$bnbData['room_people']"  name="t" }
+			<a class="yuding_renshu" >{php}echo $t+1;{/php}</a>
+			{/for}
+			<input type="hidden" id="room_people" value="0">
+		</div>
+	</div>
+	<p class="fs-16 black-fc p10 tc">总价</p>
+	<div class="yuding_box">
+		<div class="mui-row pt10 pb10 pl15 pr15">
+			<span class="gray-fc1" id="days">预定天数</span>
+			<span class="fr black-fc fw fs-16" id="total">预定价格</span>
+		</div>
+	</div>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<a href="#" class="btn_big_orange" id="submit_order">申请预定</a>
+
+<input type="hidden" name="in_date" id="in_date" value="">
+<input type="hidden" name="out_date" id="out_date" value="">
+<input type="hidden" id="bnbId" value="{$bnbData.id}">
+
+{/block}
+{block name="foot"}{/block}
+{block name="js"}
+<script>
+
+	(function () {
+
+		var pricelist= '{$price["pricelist"]}';
+
+        // 初始化日历
+        var hotel_date = new HotelDatepicker(document.getElementById('hotel_date'), {
+            enableCheckout: true,
+            autoClose: true,
+            datelist: pricelist,
+            showTopbar: false,
+            showprice: true,
+            i18n: {
+                selected: '入住：',
+                night: '晚',
+                nights: '晚',
+                button: '关闭',
+                'day-names-short': ['日', '一', '二', '三', '四', '五', '六'],
+                'day-names': ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                'month-names-short': ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+                'month-names': ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                'info-default': '选择日期'
+            },
+
+            setValue: function (data) {
+                getHotelDate(data);
+            }
+        });
+
+        $(".select-time").click(function () {
+            hotel_date.open();
+        });
+
+
+        function setDate(date, domitem) {
+            var d = date.split("-");
+            if (d.length == 3) {
+                var dt = d[1] + "/" + d[2];
+                $("." + domitem + "_time").html(dt);
+            }
+        }
+
+        function getHotelDate(hoteldate) {
+            $("#hotel_date").val(hoteldate);
+            var date = hoteldate.split(" - ");
+
+            if (date.length == 2) {
+                setHotelDaysAndPrice(date[0],date[1]);
+            }
+        }
+
+        function setHotelDaysAndPrice(begin , end)
+		{
+		    var days = 0;
+		    var price = 0;
+
+		    var plist = JSON.parse(pricelist);
+
+		    var n = false;
+		    var sell = true;
+            $.each( plist, function(index, content)
+            {
+				if (sell) {
+                    if (content.date == begin) {
+                        n = true;
+                    }
+
+                    if (content.date == end)
+                    {
+                        n = false;
+                    }
+                    if (n == true)
+					{
+                        days++;
+                        price += content.price;
+                        if (content.disabled == true) {
+                            sell = false;
+                        }
+					}
+                }
+            });
+
+            if (sell == false)
+			{
+                mui.alert('选择的日期中有不可预订的房间，请重新选择','错误提示');
+            }
+            else {
+
+                $("#in_date").val(begin);
+                $("#out_date").val(end);
+                setDate(begin, "in_date");
+                setDate(end, "out_date");
+
+                if (days > 0) {
+                    $("#days").text("入住" + days + "晚");
+                }
+
+                if (price > 0) {
+                    $("#total").text("预计￥" + price + "元");
+                }
+            }
+		}
+
+
+        //选择入住人数
+        $('.yuding_renshu').click(function(){
+            $('.yuding_renshu').css({'border':'none','color':'#666'});
+            $(this).css({ 'border':'1px solid #f88223','border-radius':'50%','color':'#f88223'});
+            $('#room_people').val(parseInt($(this).text()));
+        });
+
+
+
+        //点击预约订单
+        $('#submit_order').click(function() {
+            var begin_date = $('#in_date').val();
+            var end_date = $('#out_date').val();
+            var bnb_id = $('#bnbId').val();
+            var people_number = $('#room_people').val();
+            if(!begin_date){
+                mui.alert('请选择入住日期','错误提示');
+            }else if(!end_date){
+                mui.alert('请选择离开日期','错误提示');
+            }else if(people_number <= 0){
+                mui.alert('请选择入住人数','错误提示');
+            }else {
+                var url = "{:url('index/bnb/confirmOrder')}";
+                var params = 'bnb_id='+bnb_id+'&begin_date='+begin_date+'&end_date='+end_date+'&people_num='+people_number;
+                window.location.href = url+"?"+params;
+            }
+        });
+
+    })();
+
+
+</script>
+{/block}

@@ -1,0 +1,111 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">业主姓名</label>
+				<input type="text" placeholder="中文名" style="text-align: right;" id="name">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">业主手机</label>
+				<input type="text" placeholder="请输入11位手机号码" style="text-align: right;" id="contact-mobile">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">房源户型</label>
+				<input type="text" placeholder="室/厅/卫" style="text-align: right;" id="room">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">所在小区</label>
+				<input type="text" placeholder="小区/栋/门牌号" style="text-align: right;" id="street">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">所在地址</label>
+				<input type="text" placeholder="市/街道" style="text-align: right;" id="address">
+			</div>
+		</li>
+	</ul>
+	<h3 class="fs-18 gray-fc2 mt20"><img src="/bnb_imgs/logo.png" class="fangdong_img ml15 mr5">橙子民宿房源要求</h3>
+	<div class="fangdong_box">
+		<p>市中心，交通和生活便利</p>
+		<p>家庭住宅，有地方生活气息的小区</p>
+		<p>管理规范的高品质小区或当地人文特色建筑</p>
+		<p>只限整租，单间房源请勿发布</p>
+	</div>
+
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+
+	<a href="#" class="btn_big_orange">注册成为房东</a>
+{/block}
+{block name="foot"}{/block}
+{block name="js"}
+<script>
+	//错误提示
+	function msg(message,idDom){
+		mui.alert(message,'错误提示',function(){
+			$('#'+idDom).focus();
+		});
+	}
+	//提交注册
+	function subForm(name,contact_mobile,room,street,address){
+		var data = {};
+		data.truename = name;
+		data.contact_mobile = contact_mobile;
+		data.info = address+'_'+street+'_'+room;
+		data.street = address;
+		$.ajax({
+			url:"{:url('index/landlord/registerLandlord')}",
+			type:'post',
+			data:data,
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					mui.alert('',result.msg, function()
+					{
+						window.location.href="{:url('index/users/index')}";
+					});
+				}else{
+					mui.alert('',result.msg);
+				}
+			}
+		});
+	}
+	//点击提交
+	$('.btn_big_orange').click(function(){
+		var name = $('#name').val();
+		var contact_mobile = $('#contact-mobile').val();
+		var room = $('#room').val();
+		var street = $('#street').val();
+		var address = $('#address').val();
+		var ruleName = /[^\u4e00-\u9fa5]/;
+		var ruleMobile = /^1[34578]{1}\d{9}$/;
+		if(!name){
+			msg('请输入业主姓名','name');
+		}else if(ruleName.test(name)){
+			msg('请输入中文姓名','name')
+		}else if(!contact_mobile){
+			msg('请输入联系手机','contact-mobile');
+		}else if(!ruleMobile.test(contact_mobile)){
+			msg('请输入11位手机号码','contact-mobile');
+		}else if(!room){
+			msg('请输入房源户型','street');
+		}else if(!street){
+			msg('请输入所在小区名称','street');
+		}else if(!address){
+			msg('请输入所在街道','address');
+		}else{
+			subForm(name,contact_mobile,room,street,address);
+		}
+	});
+</script>
+{/block}
+	

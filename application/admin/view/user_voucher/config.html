@@ -1,0 +1,54 @@
+<style type="text/css">
+    @media (max-width: 375px) {
+        .edit-form tr td input{width:100%;}
+        .edit-form tr th:first-child,.edit-form tr td:first-child{
+            width:20%;
+        }
+        .edit-form tr th:last-child,.edit-form tr td:last-child{
+            display: none;
+        }
+    }
+</style>
+<div class="panel panel-default panel-intro">
+    <div class="panel-heading">
+        {:build_heading(null, false)}
+    </div>
+
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade  id="name">
+                <div class="widget-body no-padding">
+                    <form id="name-form" class="edit-form form-horizontal" role="form" data-toggle="validator"
+                          method="POST" action="{:url('general.config/edit')}">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="15%">{:__('Title')}</th>
+                                    <th width="70%">{:__('Value')}</th>
+                                    <th width="15%">{:__('Name')}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button type="submit" class="btn btn-success btn-embossed">{:__('OK')}</button>
+                                        <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>

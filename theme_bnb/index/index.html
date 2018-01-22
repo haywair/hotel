@@ -1,0 +1,168 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+<header id="header" class="mui-bar mui-bar-nav header_index" style=" padding: 0;">
+    <img src="/bnb_imgs/logo.png" class="logo_index">
+
+    <a href="#" class="btn_map"  data-city="{$citycode}">
+        <i class="iconfont fs-24">&#xe606;</i>
+    </a>
+    <div class="search_index">
+        <a href="{:url('index/city')}" class="weizhi">{$pagevar['cityname']}</a>
+            <a href="{:url('index/search' , $bnbdata['search'])}" class="btn_search">
+                <i class="iconfont">&#xe617;</i>区域 / 景点 / 商圈
+            </a>
+    </div>
+</header>
+
+<div style="padding: 44px 0;">
+    <!--图片轮换-->
+    {if $bannerData}
+    <div id="slider" class="mui-slider">
+        <div class="mui-slider-group mui-slider-loop">
+
+            <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+            <div class="mui-slider-item mui-slider-item-duplicate">
+                {php}$endBanner = end($bannerData);{/php}
+                <a href="{$endBanner.url}">
+                    <img src="{$endBanner.image}">
+                </a>
+            </div>
+            {foreach name="bannerData" item="vo"}
+            <div class="mui-slider-item">
+                <a href="{$vo.url}">
+                    <img src="{$vo.image}">
+                </a>
+            </div>
+            {/foreach}
+
+            <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+            <div class="mui-slider-item mui-slider-item-duplicate">
+                <a href="{$bannerData[0]['url']}">
+                    <img src="{$bannerData[0]['image']}">
+                </a>
+            </div>
+
+
+        </div>
+        <div class="mui-slider-indicator">
+            {foreach name="bannerData" key="key" item="vo"}
+            <div class="mui-indicator {if $key==0}mui-active{/if}"></div>
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+    <!--图片轮换/-->
+
+
+    <div class="list_index_bj">
+        <!--标题-->
+        <div class="top_title">
+            <h3>───
+                <span class="fw ml2">推</span>
+                <span class="fs-12 ml2 mr2">/</span>
+                <span class="fw">荐</span>
+                <span class="fs-12 ml2 mr2">/</span>
+                <span class="fw">房</span>
+                <span class="fs-12 ml2 mr2">/</span>
+                <span class="fw mr2">源</span>
+                ───
+            </h3>
+            <p>带你乐享品质生活</p>
+        </div>
+        <!--标题/-->
+
+
+        {if $bnbdata['data']}
+            <div id="bnb_datalist">
+                {$bnbdata['data']}
+            </div>
+            <div class="dropload-down"></div>
+        {else/}
+            <div id="bnb_datalist">
+                <div class="no_more_data">暂无民宿可以选择，<a href="{:url('@index/index/getcitylist')}"> 试试其他城市吧 </a></div>
+            </div>
+        {/if}
+    </div>
+
+
+
+
+</div>
+
+{include file="../theme_bnb/layout/layout_foot.html" /}
+
+{/block}
+
+
+
+{block name="js"}
+<link href="/bnb_js/dropload/dropload.css" rel="stylesheet" />
+<script type="text/javascript" src="/bnb_js/dropload/dropload.min.js"></script>
+
+<script>
+
+    $(function(){
+
+        var gallery = mui("#slider");
+        gallery.slider({
+            interval: 3000 //自动轮播周期，若为0则不自动播放，默认为0；
+        });
+        $('.btn_map').click(function(){
+            var citycode = $(this).attr('data-city');
+            window.location.href = "{:url('index/bnb/getMaps')}?cityCode="+citycode;
+        });
+
+
+        {if $bnbdata['page']}
+
+
+        var page_url = "{$bnbdata.page.nexturl}";
+        var page_next = {if $bnbdata.page.next}true{else/}false{/if};
+
+        $('#list_index_bj').dropload({
+            domDown : {
+                domClass   : 'dropload-down',
+                domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                domNoData  : '<div class="dropload-noData">已经没有更多数据了</div>'
+            },
+
+            scrollArea : window,
+            loadDownFn : function(me){
+                if (page_next)
+                {
+                    $.ajax({
+                        type: 'GET',
+                        url: page_url,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.page)
+                            {
+                                page_next = data.page.next;
+                                page_url = data.page.nexturl;
+                            }
+
+                            if (data.data)
+                            {
+                                $("#bnb_datalist").append(data.data);
+                            }
+
+                            me.resetload();
+                        },
+                        error: function(xhr, type){
+                            me.resetload();
+                        }
+                    });
+
+                }
+                else
+                {
+                    me.noData();
+                    me.resetload();
+                }
+            }
+        });
+
+        {/if}
+    });
+</script>
+{/block}

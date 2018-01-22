@@ -1,0 +1,91 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="user-more">
+    <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action=""  style="padding-top:50px;">
+
+        <div class="left-area">
+            <div class="form-group col-flo">
+                <label for="name" class="control-label col-xs-12 col-sm-2 cos-120">优惠券名称:</label>
+                <div class="col-xs-12 col-sm-8 col-width" >
+                    <input id="name"  class="form-control" name="row[name]" type="text" value="{$row.voucher.name}" readonly>
+                </div>
+            </div>
+            <div class="form-group col-flo" style="margin-left:20px;">
+                {php}$bnbType = config('voucher.voucher_bnb_type');{/php}
+                <label  class="control-label col-xs-12 col-sm-2 cos-120">类型:</label>
+                <div class="col-xs-12 col-sm-8 col-width" >
+                    {eq name="row['voucher']['type']" value="$bnbType"}
+                        <input id="type"  class="form-control" name="row[type]" type="text" value="民宿"  readonly>
+                    {else}
+                        <input id="type"  class="form-control" name="row[type]" type="text" value="保洁"  readonly>
+                    {/eq}
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="left-area">
+            <div class="form-group col-flo">
+                <label for="name" class="control-label col-xs-12 col-sm-2 cos-120">用户名:</label>
+                <div class="col-xs-12 col-sm-8 col-width" style="width:350px;">
+                    <input type="text" class="form-control" id="name" name="row[user_nickname]"  {notempty name="row['user_nickname']"}value="{$row.user_nickname}"{else/}value="暂无"{/notempty}  disabled />
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        {notempty name="row['voucher']['price_over']"}
+            <div class="left-area">
+                <div class="form-group col-flo" >
+                    <label for="order_sn" class="control-label col-xs-12 col-sm-2 cos-120">消费限制:</label>
+                    <div class="col-xs-12 col-sm-8 col-width" >
+                        <input type="text" class="form-control" id="price_over" name="row[price_over]" {notempty name="row['voucher']['price_over']"}value="消费满 ￥{$row.voucher.price_over}"{else/}value="暂无"{/notempty}   disabled />
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+        {/notempty}
+        <div class="left-area">
+            <div class="form-group col-flo">
+                <label for="price_discount" class="control-label col-xs-12 col-sm-2 cos-120">优惠金额:</label>
+                <div class="col-xs-12 col-sm-8 col-width">
+                    <input type="text" class="form-control" id="price_discount" name="row[price_discount]" value="{$row.voucher.price_discount}"  disabled />
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="left-area">
+            <div class="form-group col-flo">
+                <label  class="control-label col-xs-12 col-sm-2 cos-120">有效时间:</label>
+                <div class="col-xs-12 col-sm-8 col-width" style="width:300px;">
+                    <input type="text" class="form-control"
+                           value="{:date('Y-m-d',$row['voucher']['start_time'])} - {:date('Y-m-d',$row['voucher']['end_time'])}"
+                           disabled />
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        {notempty name="row['order_info']"}
+        <div class="left-area">
+            <div class="form-group col-flo">
+                <label  class="control-label col-xs-12 col-sm-2 cos-120">使用单号:</label>
+                <div class="col-xs-12 col-sm-8 col-width" style="width:300px;">
+                    <input type="text" class="form-control" value="{$row.order_info.order_sn}" disabled />
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        {/notempty}
+    </form>
+    </div>
+</div>

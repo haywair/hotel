@@ -1,0 +1,37 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/voucher')}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">优惠卷</span>
+				</div>
+			</a>
+		</li>
+		{eq name="userInfo['is_landlord']" value="1"}
+			<li class="mui-table-view-cell">
+				<a href="{:url('index/users/landlordBill')}" class="mui-navigate-right">
+					<div class="p5">
+						<span class="ml5 fs-16">房东收益</span>
+					</div>
+				</a>
+			</li>
+		{/eq}
+		{eq name="userInfo['is_cleaner']" value="1"}
+			<li class="mui-table-view-cell">
+				<a href="{:url('index/cleaninfo/cleanerBill')}" class="mui-navigate-right">
+					<div class="p5">
+						<span class="ml5 fs-16">保洁收益</span>
+					</div>
+				</a>
+			</li>
+		{/eq}
+	</ul>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+{/block}
+{block name="script"}
+	<!--mui通用-->
+	<script src="/bnb_js/mui.min.js"></script>
+{/block}

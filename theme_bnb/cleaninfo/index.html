@@ -1,0 +1,94 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div style="padding: 0 20px;  background: #fff;     -webkit-box-shadow: 0 1px 6px #ccc; box-shadow: 0 1px 6px #ccc; ">
+		<div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
+			<a class="mui-control-item mui-active" href="#item1">任务推送</a>
+			<a class="mui-control-item" href="#item2">已完成</a>
+		</div>
+	</div>
+	<div>
+		<div id="item1" class="mui-control-content mui-active">
+			{notempty name="taskData"}
+				{foreach name="taskData" item="v" }
+					<div style="background: #fff;">
+						<div class="xingcheng_list">
+							<div class="img_left">
+								{notempty name="v['bnb_image']"}
+									<img src="{$path.bnb_thumb_path}{$v.bnb_image}">
+								{else/}
+									<img src="/bnb_imgs/temp_01.png">
+								{/notempty}
+							</div>
+							<div class="content_right">
+								<div style="width: 100%;">
+									<h3>{$v.name}</h3>
+								</div>
+								<p class="yellow-fc">房东：{$v.user_nickname}</p>
+								<p>保洁费用<span class="fs-16 black-fc fw">￥{$v.fee_clean}</span></p>
+								<div style="width: 100%;">
+									<a href="#" class="btn_orange_yuan fr">联系客服</a>
+								</div>
+							</div>
+						</div>
+						<div class="border_t ml15 mr15">
+							<div class="p10">
+								<p class="mb5">
+									<i class="iconfont yellow-fc">&#xe620;</i> {:date('Y/m/d H',$v['clean_start_time'])}:00 -
+									{:date('H',$v['clean_end_time'])}:00
+								</p>
+								<p><i class="iconfont yellow-fc">&#xe614;</i> 地址：{$v.address}</p>
+								<p><i class="iconfont yellow-fc">&#xe60d;</i> 开锁密码</p>
+								<div class="xiaoxi_kaisuo">
+									123456789
+								</div>
+							</div>
+						</div>
+						<div class="border_t ml15 mr15">
+							<div class="p10" style="height: 60px;">
+								<a href="{:url('index/cleaninfo/comparePhoto',['order_clean_id'=>$v['id']])}" class="btn_xiao_orange fl">提交对比照片
+								</a>
+							</div>
+						</div>
+					</div>
+				{/foreach}
+			{else/}
+				<p class="tc"><img src="/bnb_imgs/img_03.png"></p>
+			{/notempty}
+		</div>
+
+		<div id="item2" class="mui-control-content">
+			{notempty name="finishData"}
+				{foreach name="finishData" item="v"}
+					<div style="background: #fff;">
+						<div class="xingcheng_list">
+							<div class="img_left">
+								{notempty name="v['bnb_image']"}
+									<img src="{$path.bnb_thumb_path}{$v.bnb_image}">
+								{else/}
+									<img src="/bnb_imgs/temp_01.png">
+								{/notempty}
+							</div>
+							<div class="content_right">
+								<div style="width: 100%;">
+									<a href="#" class="fr ml10">
+										<span class="gray-fc fs-14">完成</span>
+									</a>
+									<h3>{$v.name}</h3>
+								</div>
+								<p class="yellow-fc">房东：{$v.user_nickname}</p>
+								<p>保洁费用<span class="fs-16 black-fc fw">￥{$v.fee_clean}</span></p>
+							</div>
+						</div>
+					</div>
+				{/foreach}
+			{else/}
+				<p class="tc"><img src="/bnb_imgs/img_03.png"></p>
+			{/notempty}
+		</div>
+		<!--占位-->
+		<div style="height: 44px;"></div>
+		<!--占位/-->
+	</div>
+{/block}
+
+

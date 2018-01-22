@@ -1,0 +1,16 @@
+.idea
+composer.lock
+*.log
+*.css.map
+runtime
+/public/uploads
+.svn
+/public/BNB/
+/public/Avatar/
+/public/Thumb/
+/public/Thumb2/
+/public/Images/
+/public/uploads/
+/public/Banner/
+/public/Thumb_banner/
+/public/Evaluate/

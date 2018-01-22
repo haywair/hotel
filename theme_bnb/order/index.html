@@ -1,0 +1,149 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+<header class="mui-bar mui-bar-nav header_index" style="height: 60px;">
+    <div style=" background: #fff; ">
+        <div id="segmentedControl"
+             class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
+            <a class="mui-control-item mui-active" href="#item1">正在进行</a>
+            <a class="mui-control-item" href="#item2">历史订单</a>
+        </div>
+    </div>
+</header>
+<div style="height: 60px;"></div>
+<input type="hidden" id="bnbID" {notempty name="bnb_id"}value="{$bnb_id}"{/notempty}>
+<div id="item1" data-now="1" class="mui-control-content mui-active">
+    <div id="order_now">
+        {$data['now']}
+    </div>
+</div>
+
+<div id="item2" data-now="0" class="mui-control-content">
+    <div id="order_his">
+        {$data['history']}
+    </div>
+</div>
+
+<div style="height: 44px;"></div>
+
+{/block}
+
+
+{block name="js"}
+<link href="/bnb_js/dropload/dropload.css" rel="stylesheet"/>
+<script type="text/javascript" src="/bnb_js/dropload/dropload.min.js"></script>
+<script type="text/javascript" src="/bnb_js/order.js"></script>
+<script type="text/javascript">
+
+    var url_delete = "{:url('index/order/delete')}";
+    var url_cancel = "{:url('index/order/cancel')}";
+    var url_pay = "{:url('index/order/paybnb')}";
+    var url_detail = "{:url('index/order/detail')}";
+    var url_clean = "{:url('index/order/clean')}";
+    var url_evaluate = "{:url('index/order/evaluate')}";
+    var url_orderagain = "{:url('index/bnb/bnbinfo')}";
+
+    var url_orderlist = "{:url('index/order/index')}";
+
+    $(function () {
+        var bnbId = $('#bnbID').val();
+        var page_url = "{:url('@index/order')}";
+        if(bnbId){
+            page_url = "{:url('@index/order')}?bnb_id="+bnbId;
+        }
+
+
+        var now_page = "{$pagedata['now']['page']}";
+        var now_next = "{$pagedata['now']['next']}";
+
+
+        var his_page = "{$pagedata['history']['page']}";
+        var his_next = "{$pagedata['history']['next']}";
+
+        $('#item1').dropload({
+            domDown: {
+                domClass: 'dropload-down',
+                domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData">已经没有更多数据了</div>'
+            },
+
+            scrollArea: window,
+
+            loadDownFn: function (me) {
+
+                if (now_next == "1") {
+                    now_page++;
+
+                    $.ajax({
+                        type: 'POST',
+                        url: page_url,
+                        data: {now: 1, page: now_page},
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.page) {
+                                now_next = data.page.next;
+                            }
+
+                            if (data.data) {
+                                $("#order_now").append(data.data);
+                            }
+
+                            me.resetload();
+                        },
+                        error: function (xhr, type) {
+                            me.resetload();
+                        }
+                    });
+                }
+                else {
+                    me.noData();
+                    me.resetload();
+                }
+            }
+        });
+
+        $('#item2').dropload({
+            domDown: {
+                domClass: 'dropload-down',
+                domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                domNoData: '<div class="dropload-noData">已经没有更多数据了</div>'
+            },
+
+            scrollArea: window,
+            loadDownFn: function (me) {
+
+                if (his_next == "1") {
+                    his_page++;
+
+                    $.ajax({
+                        type: 'POST',
+                        url: page_url,
+                        data: {now: 0, page: his_page},
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.page) {
+                                his_next = data.page.next;
+                            }
+
+                            if (data.data) {
+                                $("#order_his").append(data.data);
+                            }
+
+                            me.resetload();
+                        },
+                        error: function (xhr, type) {
+                            me.resetload();
+                        }
+                    });
+                }
+                else {
+                    me.noData();
+                    me.resetload();
+                }
+            }
+        });
+
+    });
+
+
+</script>
+{/block}

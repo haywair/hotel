@@ -1,0 +1,21 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<ul class="mui-table-view">
+		{foreach name="helpData" key="k" item="v"}
+			{php}$k = $k+1;{/php}
+			<li class="mui-table-view-cell mui-collapse">
+				<a class="mui-navigate-right" href="#">
+					<div class="p5"> {$k}、{$v.title}</div>
+				</a>
+				<div class="mui-collapse-content">
+					<p>{$v.content}</p>
+				</div>
+			</li>
+		{/foreach}
+	</ul>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<!--<a href="#" class="btn_big_orange">在线提问</a>-->
+{/block}
+{block name="foot"}{/block}

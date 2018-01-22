@@ -1,0 +1,56 @@
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    {notempty name="row['id']" }
+        <input type="hidden" name="id" value="{$row.id}">
+    {/notempty}
+    <input type="hidden" name="bnb_id" value="{$bnb_id}">
+    <div class="form-group">
+        <label for="c-w1" class="control-label col-xs-12 col-sm-2">周一:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-w1" data-rule="required" class="form-control" name="price_w1" type="number"  {notempty name="row['price_w1']"}value="{$row.price_w1}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-w2" class="control-label col-xs-12 col-sm-2">周二:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-w2" data-rule="required" class="form-control" name="price_w2" type="number" {notempty name="row['price_w1']"}value="{$row.price_w2}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-w3" class="control-label col-xs-12 col-sm-2">周三:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-w3" data-rule="required" class="form-control" name="price_w3" type="number" {notempty name="row['price_w1']"}value="{$row.price_w3}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-w4" class="control-label col-xs-12 col-sm-2">周四:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-w4" data-rule="required" class="form-control" name="price_w4" type="number" {notempty name="row['price_w1']"}value="{$row.price_w4}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-w5" class="control-label col-xs-12 col-sm-2">周五:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-w5" data-rule="required" class="form-control" name="price_w5" type="number" {notempty name="row['price_w1']"}value="{$row.price_w5}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-w6" class="control-label col-xs-12 col-sm-2">周六:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-w6" data-rule="required" class="form-control" name="price_w6" type="number" {notempty name="row['price_w1']"}value="{$row.price_w6}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-w7" class="control-label col-xs-12 col-sm-2">周日:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-w7" data-rule="required" class="form-control" name="price_w7" type="number" {notempty name="row['price_w7']"}value="{$row.price_w7}"{/notempty}>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

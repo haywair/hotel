@@ -1,0 +1,86 @@
+<div role="tabpanel" class="tab-pane active" id="con_135">
+    <input type="hidden" id="sign_voucher_val"  value="{$data.sign_voucher}">
+    <input type="hidden" id="check_voucher_val"  value="{$data.check_voucher}">
+    <input type="hidden" id="present_voucher_val"  value="{$data.present_voucher}">
+    <div class="col-md-12" style="padding: 0;">
+        <!-- Custom Tabs -->
+        <div class="nav-tabs-custom" style="margin-left:10px">
+            <ul class="nav nav-tabs">
+                <li class="active"  data-id="sign"><a href="#sign_voucher" data-toggle="tab" aria-expanded="true">
+                    用户注册优惠券</a></li>
+                <li class="bg-color" data-id="check"><a href="#check_voucher" data-toggle="tab" aria-expanded="true">完成调查优惠券
+                </a></li>
+                <li class="bg-color" data-id="present"><a href="#present_voucher" data-toggle="tab"  aria-expanded="true">
+                    赠送保洁优惠券</a></li>
+            </ul>
+            <div class="tab-content" style="padding: 0">
+
+                <div class="tab-pane active voucher-con" id="sign_voucher">
+                    <div class="tab-content tab-addtabs voucher-container" >
+                        <div role="tabpanel" class="tab-pane active container-bg" >
+                            <span class="span-left">
+                                选择优惠券:</span>
+                            <span class="span-right">
+                                <form  class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+                                    <div class="form-group">
+                                        <div class="col-xs-12 col-sm-8" style="width:400px;">
+                                            <input id="sign_voucher-input" data-rule="required" data-source="voucher/index" data-multiple="true" class="form-control selectpage" name="sign_voucher" data-key="" type="text" {notempty  name="data['sign_voucher']"} value="{$data.sign_voucher}"{/notempty}  style="width:300px;">
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                            <button class="btn btn-success" style="margin-left:15px;" data-id="sign_voucher" >确定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane active voucher-con" id="check_voucher" style="display:none;">
+                    <div class="tab-content tab-addtabs voucher-container" >
+                        <div role="tabpanel" class="tab-pane active container-bg" >
+                            <span class="span-left">
+                                选择优惠券:</span>
+                            <span class="span-right">
+                                <form  class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+                                    <div class="form-group">
+                                        <div class="col-xs-12 col-sm-8" style="width:400px;">
+                                            <input id="check_voucher-input" data-rule="required" data-source="voucher/index" data-multiple="true" class="form-control selectpage" name="sign_voucher" data-key="" type="text" {notempty  name="data['check_voucher']"}value="{$data.check_voucher}"{/notempty}  style="width:300px;">
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                            <button class="btn btn-success" style="margin-left:15px;" data-id="check_voucher" >确定
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane active voucher-con" id="present_voucher" style="display:none;">
+                    <div class="tab-content tab-addtabs voucher-container" >
+                        <div role="tabpanel" class="tab-pane active container-bg" >
+                            <span class="span-left">
+                                选择优惠券:</span>
+                            <span class="span-right">
+                                <form id="lorder-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+                                    <div class="form-group">
+                                        <div class="col-xs-12 col-sm-8" style="width:400px;">
+                                            <input id="present_voucher-input" data-rule="required"
+                                                   data-source="voucher/index" data-multiple="true" class="form-control selectpage" name="sign_voucher" data-key="" type="text" {notempty  name="data['present_voucher']"}value="{$data.present_voucher}"{/notempty}  style="width:300px;">
+                                        </div>
+                                    </div>
+                                </form>
+                            </span>
+                            <button class="btn btn-success" style="margin-left:15px;" data-id="present_voucher" >确定</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+        </div>
+        <!-- nav-tabs-custom -->
+    </div>
+</div>
+<style>
+    .content {
+        padding: 0;
+    }
+</style>

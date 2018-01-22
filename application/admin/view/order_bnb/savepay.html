@@ -1,0 +1,30 @@
+<form id="district-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action=""
+      style="min-height:600px;">
+    <input id="ids"  class="form-control" name="row[order_sn]"  type="hidden" value="{$order_sn}" >
+    <div class="form-group">
+        <label for="c-pay_sn" class="control-label col-xs-12 col-sm-2">{:__('支付单号')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-pay_sn" data-rule="required" class="form-control" name="row[pay_sn]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-trade_no" class="control-label col-xs-12 col-sm-2">{:__('交易流水号')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-trade_no" data-rule="required" class="form-control" name="row[trade_no]" type="text">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-in_hour" class="control-label col-xs-12 col-sm-2">{:__('付款时间')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-in_hour" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD HH:mm:ss" data-use-current="true" name="row[pay_time]" type="text" >
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

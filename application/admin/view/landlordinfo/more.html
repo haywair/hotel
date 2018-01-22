@@ -1,0 +1,140 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="user-more">
+    <ul class="bnb-more-btn" >
+        {notempty name="row['is_landlord']"}
+            {eq name="row['is_landlord']" value='1'}
+                <li id="landlord-preview" >查看房东信息</li>
+                <li id="bnb-bind" >绑定民宿</li>
+            {/eq}
+        {/notempty}
+        {notempty name="orderBnbNum"}
+            <li id="order-bnb-preview" >查看民宿订单</li>
+        {/notempty}
+        {notempty name="billLandlordNum"}
+            <li id="bill-landlord-preview" >查看房东结算信息</li>
+        {/notempty}
+    </ul>
+    <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+        <input id="ids"  class="form-control" name="ids"  type="hidden" {notempty name="row['id']"}value="{$row.id}"{/notempty} >
+
+        <div class="form-group">
+            <label for="nickname" class="control-label col-xs-12 col-sm-2">{:__('Nickname')
+                }:</label>
+            <div class="col-xs-12 col-sm-8 col-width" >
+                <input id="nickname"  class="form-control" name="row[user_nickname]" type="text" value="{$row.user_nickname}" readonly>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-width-320" >
+                <label for="user_truename" class="label-col">{:__('Truename')}:</label>
+                <input id="user_truename"  class="form-control input-label" name="row[user_truename]" {notempty name="row['user_truename']"}value="{$row.user_truename}"{else/}value="未填写"{/notempty}  readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="status" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                {:build_radios('row[status]', [1=>__('Normal'),0=>__('Hidden'),-1=>__('Deleted')], $row['status'])}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="user_class" class="control-label col-xs-12 col-sm-2">{:__('用户类型')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                {eq name="row['user_class']" value="1"}
+                <input type="text" class="form-control" id="user_class" name="row[user_class]" value="普通用户"  disabled />
+                {else/}
+                <input type="text" class="form-control" id="user_class" name="row[user_class]" value="认证用户"  disabled />
+                {/eq}
+            </div>
+            {eq name="row['is_landlord']" value="1"}
+                <div class="col-xs-12 col-sm-8 col-width-320">
+                    <label for="cleaner" class="label-col">用户身份:</label>
+                    <input type="text" class="form-control input-label" id="cleaner" name="row[is_cleaner]"  value="房东" disabled />
+                </div>
+            {/eq}
+        </div>
+        <div class="form-group">
+            <label for="mobile" class="control-label col-xs-12 col-sm-2">{:__('Mobile')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input type="text" class="form-control" id="mobile" name="row[user_mobile]" {notempty name="row['user_mobile']"}value="{$row.user_mobile}"{else/}value="未填写"{/notempty} disabled />
+            </div>
+        </div>
+       <!-- <div class="form-group">
+            <label for="money" class="control-label col-xs-12 col-sm-2">{:__('Money')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input type="text" class="form-control" id="money" name="row[money]" {notempty name="row['money']"}value="{$row.money}"{else/}value="暂无"{/notempty} disabled />
+            </div>
+        </div>-->
+        <div class="form-group">
+            <label for="login_numbers" class="control-label col-xs-12 col-sm-2">{:__('登录次数')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input type="text" class="form-control" id="login_numbers" name="row[login_numbers]" value="{$row.login_numbers}"  disabled />
+            </div>
+            {notempty name="row['lastlogin_time']"}
+                <div class="col-xs-12 col-sm-8 col-width-320">
+                    <label for="lastlogin_time" class="label-col">{:__('登录时间')}:</label>
+                    <input type="text" class="form-control input-label" id="lastlogin_time" name="row[lastlogin_time]" value="{:date('Y-m-d H:i:s',$row['lastlogin_time'])}"  disabled />
+                </div>
+
+            {/notempty}
+            {notempty name="row['lastlogin_ip']"}
+                <div class="col-xs-12 col-sm-8 col-width-320">
+                    <label for="lastlogin_ip" class="label-col">{:__('登录ip')}:</label>
+                    <input type="text" class="form-control input-label" id="lastlogin_ip" name="row[lastlogin_ip]" value="{$row.lastlogin_ip}"  disabled />
+                </div>
+            {/notempty}
+        </div>
+        {notempty name="row['lastmessage_time']"}
+        <div class="form-group">
+            <label for="lastmessage_time" class="control-label col-xs-12 col-sm-2">{:__('最新消息时间')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input type="text" class="form-control" id="lastmessage_time" name="row[lastmessage_time]" value="{:date('Y-m-d H:i:s',$row['lastmessage_time'])}"  disabled />
+            </div>
+        </div>
+        {/notempty}
+        {notempty name="row['mapupdate_time']"}
+        <div class="form-group">
+            <label for="mapupdate_time" class="control-label col-xs-12 col-sm-2">{:__('最新定位时间')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input type="text" class="form-control" id="mapupdate_time" name="row[mapupdate_time]"  value="{:date('Y-m-d H:i:s',$row['mapupdate_time'])}"  disabled />
+            </div>
+        </div>
+        {/notempty}
+        {if ($row['user_idcard_number'] ) and ($row['user_idcard_image'])}
+            <div class="form-group">
+                <label for="mapupdate_time" class="control-label col-xs-12 col-sm-2">{:__('身份证号码')}:</label>
+                <div class="col-xs-12 col-sm-8 col-width">
+                    <input type="text" class="form-control"    value="{$row.user_idcard_number}"  disabled />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="mapupdate_time" class="control-label col-xs-12 col-sm-2">{:__('身份证照片')}:</label>
+                {foreach name="idcardImg" item="v"}
+                <img src="{$imgPath}{$v}" alt="">
+                {/foreach}
+            </div>
+        {/if}
+        {if ($row['map_lat'] gt 0) and ($row['map_lng'] gt 0)}
+        <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.0&key=c7bcea605dd2b749f423ae8d45d1aa4b"></script>
+        <div class="form-group" id="lng-lat-area" >
+            <label for="c-area_city_number" class="control-label col-xs-12 col-sm-2">位置：</label>
+            <input type="hidden" name="row[map_lat]" id="lat" value="{$row.map_lat}">
+            <input type="hidden" name="row[map_lng]" id="lng" value="{$row.map_lng}">
+            <div class="col-xs-12 col-sm-8" id="maps" style="height:200px;">
+
+            </div>
+        </div>
+        {/if}
+    </form>
+    </div>
+</div>

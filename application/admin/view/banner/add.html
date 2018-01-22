@@ -1,0 +1,43 @@
+<form id="bnbInfo-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    {notempty name="row['id']"}
+    <input type="hidden" name="row[id]" value="{$row.id}">
+    {/notempty}
+    <div class="form-group">
+        <label for="c-name" class="control-label col-xs-12 col-sm-2">名称:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-name" data-rule="required" class="form-control" name="row[name]" type="text"  {notempty name="row['name']"}value="{$row.name}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-weigh" data-rule="required" class="form-control" name="row[weigh]" type="number" {notempty name="row['weigh']"}value="{$row.weigh}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-url" class="control-label col-xs-12 col-sm-2">url链接:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-url"  class="form-control" name="row[url]" type="text"  {notempty  name="row['url']"}value="{$row.url}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-image" class="control-label col-xs-12 col-sm-2">图片:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-image" data-rule="required" class="form-control" size="50" name="row[image]" type="text" {notempty name="row['image']"}value="{$row.image}"{/notempty}>
+                <div class="input-group-addon no-border no-padding">
+                    {:upload_image("banner",'image')}
+                </div>
+                <span class="msg-box n-right" for="c-image"></span>
+            </div>
+            <ul class="row list-inline plupload-preview" id="p-image"></ul>
+        </div>
+    </div>
+    <div class="form-group ">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

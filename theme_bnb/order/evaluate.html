@@ -1,0 +1,245 @@
+{extend name="./layout/site_layout" /}
+
+{block name="css"}
+<style type="text/css">
+    .removePhoto
+    {
+        position: absolute; top:5px; right:5px; width:20px; height:20px; background-color: #EEE; text-align: center;
+    }
+</style>
+{/block}
+
+{block name="content"}
+
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">订单评价</h1>
+</header>
+
+<div class="xingcheng_list mb10" style="position:relative;margin-top:44px;">
+    <a href="{:url('@index/bnb/bnbinfo' ,['id'=>$bnb['id']])}">
+        <div class="img_left">
+            {notempty name="bnb.image"}
+            <img src="{$bnb.image}">
+            {else/}
+            <img src="/bnb_imgs/temp_01.png">
+            {/notempty}
+        </div>
+    </a>
+    <div class="content_right">
+        <div style="width: 100%;">
+            <h3>{$bnb.name}</h3>
+        </div>
+        <p>{:str_replace('-','/',$order['in_date'])} - {:str_replace('-','/',$order['out_date'])}</p>
+        <p>共{$order.night}晚 入住{$order.people_numbers}人</p>
+        <div style="width: 100%;">
+            <p>
+                <span class="fs-16 fw gray-fc2">￥{$order.pay_total}元(保证金￥{$order.deposit_amount}元)</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="pingjia_box mb10">
+    <div class="pb10">
+        <img src="/bnb_imgs/icon_03.png" class="pingjia_icon">
+        <span class="fs-16">用户评价</span>
+    </div>
+    <textarea id="textarea" rows="5" placeholder="请输入您的评价..."></textarea>
+    <div class="mui-col-xs-12 mb10" id="up-li">
+    </div>
+    <div class="mui-col-xs-12" style="float: none; clear: both; padding-top: 10px;">
+        <img src="/bnb_imgs/icon_zhaopian.png" id="upBtn">
+    </div>
+</div>
+<div class="pingjia_box mb10">
+    <input type="hidden" name="score[]" id="bnb">
+    <input type="hidden" name="score[]" id="traffic">
+    <input type="hidden"  name="score[]" id="clean">
+    <ul class="mui-row">
+        <li class="mui-col-xs-12 mb10">
+				<span class="fl fs-14">
+					房间环境：
+				</span>
+            <div class="pingjia_xingxing fl">
+                <div class="pingjia_xingxing_a" style="width: 120%;">
+                    <a href="javascript:void(0)" class="bnb1 bnb"  data-title="bnb" data-i="1">★</a>
+                    <a href="javascript:void(0)" class="bnb2 bnb"  data-title="bnb" data-i="2">★</a>
+                    <a href="javascript:void(0)" class="bnb3 bnb" data-title="bnb" data-i="3">★</a>
+                    <a href="javascript:void(0)" class="bnb4 bnb"  data-title="bnb" data-i="4">★</a>
+                    <a href="javascript:void(0)" class="bnb5 bnb"  data-title="bnb"  data-i="5">★</a>
+                </div>
+            </div>
+        </li>
+        <li class="mui-col-xs-12 mb10">
+				<span class="fl fs-14">
+					周边交通：
+				</span>
+            <div class="pingjia_xingxing fl">
+                <div class="pingjia_xingxing_a" style="width: 120%;">
+                    <a href="javascript:void(0)" class="traffic1 traffic"  data-title="traffic" data-i="1">★</a>
+                    <a href="javascript:void(0)" class="traffic2 traffic"  data-title="traffic" data-i="2">★</a>
+                    <a href="javascript:void(0)" class="traffic3 traffic" data-title="traffic" data-i="3">★</a>
+                    <a href="javascript:void(0)" class="traffic4 traffic"  data-title="traffic" data-i="4">★</a>
+                    <a href="javascript:void(0)" class="traffic5 traffic"  data-title="traffic"  data-i="5">★</a>
+                </div>
+            </div>
+        </li>
+        <li class="mui-col-xs-12 mb10">
+				<span class="fl fs-14">
+					房屋清洁：
+				</span>
+            <div class="pingjia_xingxing fl">
+                <div class="pingjia_xingxing_a" style="width: 120%;">
+                    <a href="javascript:void(0)" class="clean1 clean"  data-title="clean" data-i="1">★</a>
+                    <a href="javascript:void(0)" class="clean2 clean"  data-title="clean" data-i="2">★</a>
+                    <a href="javascript:void(0)" class="clean3 clean" data-title="clean" data-i="3">★</a>
+                    <a href="javascript:void(0)" class="clean4 clean"  data-title="clean" data-i="4">★</a>
+                    <a href="javascript:void(0)" class="clean5 clean"  data-title="clean"  data-i="5">★</a>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<!--占位-->
+<div style="height: 44px;"></div>
+<!--占位/-->
+<a href="#" class="btn_big_orange">发布评价</a>
+
+{/block}
+{block name="foot"}{/block}
+{block name="script"}
+<script src="/assets/libs/plupload/js/plupload.full.min.js"></script>
+{/block}
+{block name="js"}
+<script type="text/javascript">
+    $(function(){
+        var times = "{:config('setting.upload_evaluate_photo_num')}";
+        var upload_init = 0;
+        //实例化一个plupload上传对象
+        var uploader = new plupload.Uploader({
+            browse_button : 'upBtn', //触发文件选择对话框的按钮，为那个元素id
+            url : "{:url('@upload/evaluate')}", //服务器端的上传页面地址
+            flash_swf_url : 'Moxie.swf', //swf文件，当需要使用swf方式进行上传时需要配置该参数
+            silverlight_xap_url : 'Moxie.xap', //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+            filters: {
+                max_file_size: '10mb',
+                mime_types: [ //允许文件上传类型
+                    {
+                        title: "files",
+                        extensions: "jpg,png,gif"
+                    }]
+            },
+            multi_selection: false,
+            init: {
+                FilesAdded: function(up, files) { //文件上传前
+                    if(upload_init >= times){
+                        mui.alert(('至多上传'+times+'张图片'),'错误提示');
+                        //return false;
+                    }else{
+                        uploader.start();
+                    }
+                },
+                UploadProgress: function(up, file) { //上传中，显示进度条
+
+                },
+                FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+                    var res = JSON.parse(info.response);
+                    if(res.code == 0){
+                        var html = '<div style="float:left;margin-right:10px; width:100px; height:100px;">';
+                        html += '<div style="position: relative;"><span class="removePhoto">X</span></div>';
+                        html += '<img src="'+""+res.data.thumb[0]+'" width="100" height="100">';
+                        html += '<input type="hidden" name="photos[]" class="photos" value="'+res.data.file+'">';
+                        html += '</div>';
+                        $('#up-li').append(html);
+                        upload_init++;
+                    }else{
+                        mui.alert('图片上传失败！');
+                    }
+
+                },
+                Error: function(up, err) { //上传出错的时候触发
+                }
+            }
+        });
+
+        uploader.init();
+        //点星评价
+        $('.bnb,.traffic,.clean').click(function(){
+            var index = $(this).attr("data-i");
+            var title = $(this).attr('data-title');
+            starChange(title,'remark2',index);
+        });
+        function starChange(star,remark,index){
+            $('#'+star).val(index);
+            switch(index){
+                case "1":
+                    $("."+remark).text("非场不满意！！！");
+                    break;
+                case "2":
+                    $("."+remark).text("不满意！！");
+                    break;
+                case "3":
+                    $("."+remark).text("一般！");
+                    break;
+                case "4":
+                    $("."+remark).text("满意~");
+                    break;
+                case "5":
+                    $("."+remark).text("非常满意~");
+                    break;
+            }
+
+            $('.'+star).css('color','#999');
+            for(var i=1; i<=index; i++){
+                $("."+star+ i).css('color','#ff9c00');
+            }
+        }
+        //提交评价
+        $('.btn_big_orange').click(function(){
+            var jsonStr = {};
+            var image = [];
+            var scoreArr = [];
+            jsonStr.order_sn = "{$order.order_sn}";
+            jsonStr.bnb_id = "{$order.bnb_id}";
+            jsonStr.evaluate = $('#textarea').val();
+            //图片处理
+            if( upload_init > 0){
+                $('input[name="photos[]"]').each(function(item) {
+                    image[item] = $(this).val();
+                });
+            }
+            //评分处理
+            $('input[name="score[]"]').each(function(item){
+                scoreArr[item] = parseInt($(this).val());
+            });
+            jsonStr.score = scoreArr;
+            jsonStr.images = image.join(',');
+            //ajax提交评价
+            $.ajax({
+                url:"{:url('index/order/doevaluate')}",
+                type:'post',
+                data:jsonStr,
+                dataType:'json',
+                success:function(result){
+                    if(result.code == 1){
+                        mui.alert('您已成功提交评价，谢谢您的反馈','操作提示',function(){
+                            window.location.href = "{:url('index/users/evaluate')}";
+                        });
+                    }else{
+                        mui.alert(result.msg,'错误提示');
+                    }
+                }
+            });
+        });
+
+
+        $(document).on("click", ".removePhoto", function (e) {
+            e.preventDefault();
+            $(this).parent().parent().remove();
+            upload_init--;
+        });
+    });
+</script>
+{/block}

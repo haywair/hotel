@@ -1,0 +1,51 @@
+<form id="edit-form" class="form-horizontal form-ajax" role="form" data-toggle="validator" method="POST" action="">
+    <div class="form-group">
+        <label for="user_truename" class="control-label col-xs-12 col-sm-2">{:__('Truename')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="user_truename" name="row[user_truename]" value="{$row.user_truename}"  data-rule="required;chinese" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="nickname" class="control-label col-xs-12 col-sm-2">{:__('Nickname')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="nickname" name="row[user_nickname]"  value="{$row.user_nickname}"   data-rule="required" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="mobile" class="control-label col-xs-12 col-sm-2">{:__('Mobile')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input type="text" class="form-control" id="mobile" name="row[user_mobile]" value="{$row.user_mobile}"  data-rule="required;mobile" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="cleaner" class="control-label col-xs-12 col-sm-2">{:__('Cleaner')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[is_cleaner]', [1=>"是", 0=>"否"], $row['is_cleaner']);}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="landlord" class="control-label col-xs-12 col-sm-2">{:__('Landlord')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[is_landlord]', [1=>"是", 0=>"否"], $row['is_landlord']);}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="user_class" class="control-label col-xs-12 col-sm-2">{:__('Userclass')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[user_class]', [1=>"普通用户", 2=>"认证用户"], $row['user_class']);}
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="content" class="control-label col-xs-12 col-sm-2">{:__('Status')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            {:build_radios('row[status]', [1=>__('Normal'),0=>__('Hidden'),-1=>__('Deleted')], $row['status'])}
+        </div>
+    </div>
+    <div class="form-group hidden layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

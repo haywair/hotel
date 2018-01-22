@@ -1,0 +1,51 @@
+<form id="addOrEdit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="" style="padding-left:50px;height:400px;">
+    {notempty name="row['id']"}
+        <input type="hidden" name="id" value="{$row.id}">
+    {/notempty}
+    <div class="form-group">
+        <label for="c-price_type" class="control-label col-xs-12 col-sm-2">类型:</label>
+        <div class="col-xs-12 col-sm-8 area-spe-input" >
+            {php}
+                $checked = 'checked';
+                if(isset($row) && ($row['price_type'] == 2)){
+                    $checked = '';
+                }
+            {/php}
+            <input type="radio" name="price_type" id="c-price_type" value="1" {$checked} >时间段
+            <input type="radio" id="c-price_type" name="price_type" value="2" {notempty name="row['price_type']"}{eq name="row['price_type']"
+                   value="2"}checked{/eq}{/notempty} >特定时间
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="c-name" class="control-label col-xs-12 col-sm-2">名称:</label>
+        <div class="col-xs-12 col-sm-8 area-spe-input">
+            <input id="c-name" data-rule="required" class="form-control " name="name"  type="text"  {notempty name="row['name']"}value="{$row.name}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-begin_date" class="control-label col-xs-12 col-sm-2" id="begin-time">开始时间:</label>
+        <div class="col-xs-12 col-sm-8 area-spe-input">
+            <input id="c-begin_date" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="begin_date" type="text" {notempty name="row['begin_date']"}value="{$row.begin_date}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group" {notempty name="row['price_type']"}{eq name="row['price_type']" value="2"}style="display:none;"{/eq}{/notempty} id="end-time">
+        <label for="c-end_date" class="control-label col-xs-12 col-sm-2">结束时间:</label>
+        <div class="col-xs-12 col-sm-8 area-spe-input">
+            <input id="c-end_date" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="end_date" type="text" {notempty name="row['end_date']"}value="{$row.end_date}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-price" class="control-label col-xs-12 col-sm-2">价格:</label>
+        <div class="col-xs-12 col-sm-8 area-spe-input" >
+            <input id="c-price" data-rule="required,number" class="form-control "  name="price"  type="number" {notempty name="row['price']"}value="{$row.price}"{/notempty}>
+        </div>
+    </div>
+    <input type="hidden" name="bnb_id" value="{$bid}">
+    <div class="form-group" style="margin-top:50px;">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

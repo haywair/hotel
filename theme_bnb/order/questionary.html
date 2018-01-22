@@ -1,0 +1,81 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+<form>
+<header class="mui-bar mui-bar-nav header_index" style="height:50px;">
+    <div style=" background: #fff; ">
+        <div class="questionary-header">
+            <p >保洁满意度调查</p>
+        </div>
+    </div>
+</header>
+<div style="height: 60px;"></div>
+<input type="hidden" id="bnbId" name="bnb_id" value="{$bnb_order.bnb_id}">
+<input type="hidden" id="bnb_order" name="bnb_order_sn" value="{$bnb_order.order_sn}">
+<input type="hidden" id="clean_order" name="clean_order_sn" value="{$clean_order.order_sn}">
+<input type="hidden" id="cleanerId" name="clearner_id" value="{$clean_order.cleaner_id}">
+<div id="item1" data-now="1" class="mui-control-content mui-active">
+    {notempty name="questions"}
+    {foreach name="questions" item="v"}
+    <div class="xiaoxi_list questionary-list" style="min-height:110px;">
+        <div class="questionary-title">
+            <span class="title-icon">Q</span>
+            <input type="hidden" name="q_id[]" value="{$v.id}">
+            <input type="hidden" name="q_score[]" value="{$v.score}">
+            <span class="title-content"> {$v.title}</span>
+        </div>
+        {notempty name="v['content']"}
+        <ul>
+            {foreach name="v['content']" key="k" item="vo"}
+            {php}
+                $checked = '';
+                if($k == 0){
+                    $checked = 'checked';
+                }
+            {/php}
+            <li>
+                <input type='radio' id="{$vo.id}" class="qc_id{$v.id}" name="qc_id{$v.id}" {$checked}
+                       value="{$vo.id}" style="display:none;">
+                <span>
+                    <input type="radio" class="qc-check" name="score{$v.id}" data-id="{$vo.id}" data-qid="{$v.id}"  {$checked} value="{$vo.score}">
+                </span>
+                <span>{$vo.title}: </span>
+                <span>{$vo.content} </span>
+                <span>({$vo.score}分)</span>
+                <div style="clear:both;"></div>
+            </li>
+            {/foreach}
+        </ul>
+        {/notempty}
+    </div>
+    {/foreach}
+    {/notempty}
+</div>
+<a href="#" class="btn_big_orange" id="submit_order">提交</a>
+</form>
+{/block}
+{block name="js"}
+    <script type="text/javascript">
+        $('.qc-check').click(function(){
+            var data_id = $(this).attr('data-id');
+            var data_qid = $(this).attr('data-qid');
+            $('.qc_id'+data_qid).removeAttr('checked');
+            $('#'+data_id).prop('checked',true);
+        });
+        $('#submit_order').click(function(){
+            var data = $('form').serialize();
+            $.ajax({
+                url:"{:url('index/order/questionaryscore')}",
+                type:'post',
+                data:data,
+                dataType:'json',
+                success:function(result){
+                    if(result.code == 1){
+                        mui.toast(result.msg);
+                    }else{
+                        mui.alert(result.msg,'错误提示');
+                    }
+                }
+            });
+        });
+    </script>
+{/block}

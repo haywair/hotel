@@ -1,0 +1,42 @@
+<form id="image-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+    <input id="ids"  class="form-control" name="row[id]"  type="hidden" value="{$row.id}" >
+    <div class="form-group">
+        <label for="c-user_idcard_number" class="control-label col-xs-12 col-sm-2">{:__('证件号码')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-user_idcard_number" data-rule="required,idcard" class="form-control" name="row[user_idcard_number]" type="number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-user_idcard_image_up" class="control-label col-xs-12 col-sm-2">{:__('身份证图片(正面)')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-user_idcard_image_up" data-rule="required" class="form-control" size="50" name="row[user_idcard_image_up]" type="text" {notempty name="row['user_idcard_image']"}value="{$row.user_idcard_image}"{/notempty}>
+                <div class="input-group-addon no-border no-padding">
+                    {:upload_image("idcard",'user_idcard_image_up',$row['id'])}
+                </div>
+                <span class="msg-box n-right" for="c-user_idcard_image_up"></span>
+            </div>
+            <ul class="row list-inline plupload-preview" id="p-user_idcard_image_up"></ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-user_idcard_image_down" class="control-label col-xs-12 col-sm-2">{:__('身份证图片(反面)')}:</label>
+        <div class="col-xs-12 col-sm-8">
+            <div class="input-group">
+                <input id="c-user_idcard_image_down" data-rule="required" class="form-control" size="50" name="row[user_idcard_image_down]" type="text" >
+                <div class="input-group-addon no-border no-padding">
+                    {:upload_image("idcard",'user_idcard_image_down',$row['id'])}
+                </div>
+                <span class="msg-box n-right" for="c-user_idcard_image_down"></span>
+            </div>
+            <ul class="row list-inline plupload-preview" id="p-user_idcard_image_down"></ul>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

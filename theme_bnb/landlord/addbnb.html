@@ -1,0 +1,169 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<a href="#" class="btn_big_orange1">提交审核</a>
+	<input type="hidden" id="type" {notempty name="type"}value="{$type}"{/notempty}>
+	<div class="fangdong_top_bj">
+		<div style="padding-top: 50px;">
+			<a href="#" id="browse">
+				<img src="/bnb_imgs/icon_zhaopian.png" id="bnb-img" >
+			</a>
+		</div>
+	</div>
+	
+	<ul class="mui-table-view" style="margin-top: 224px;">
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['title']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">撰写标题</span>
+					<span class="fr fs-14 gray-fc mr20">{notempty name="addData['title']"}{$addData['title']}{/notempty}</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a  href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['demo_content']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">撰写简介</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['price']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">设置价格</span>
+					<span class="fr fs-14 gray-fc mr20">{notempty name="addData['price']"}￥{$addData['price']}{/notempty}</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['address']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">设置地址</span>
+					<span class="fr fs-14 gray-fc mr20">
+						{notempty name="addData['address']"}{$addData['address']}{/notempty}
+					</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a  href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['room']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">房型</span>
+					<span class="fr fs-14 gray-fc mr20">
+						{notempty name="addData['room']"}{$addData['room']}{/notempty}
+					</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['bed']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">床型</span>
+					<span class="fr fs-14 gray-fc mr20">
+						{notempty name="addData['bed']"}{$addData['bed']}{/notempty}
+					</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['people']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">限定人数</span>
+					<span class="fr fs-14 gray-fc mr20">
+						{notempty name="addData['people']"}{$addData['people']}{/notempty}
+					</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a  href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['features']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">屋内基础配套</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a  href="{:url('index/landlord/addStepOne',['type'=>$typeKeys['rules']])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">入住规则</span>
+				</div>
+			</a>
+		</li>
+		
+	</ul>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+{/block}
+{block name="script"}
+	<script src="/assets/libs/plupload/js/plupload.full.min.js"></script>
+{/block}
+{block name="js"}
+<script>
+	var type = $('#type').val();
+	if(type && localStorage.getItem("bnb_img")){
+		$('#bnb-img').attr('src',("{$path.bnb_thumb_path}"+localStorage.getItem("bnb_img")));
+		$('#bnb-img').css({'width':'100%','height':'180px','margin-top':'-50px'});
+	}else{
+		localStorage.setItem("bnb_img",'');
+	}
+	//实例化一个plupload上传对象
+	var uploader = new plupload.Uploader({
+		browse_button : 'browse', //触发文件选择对话框的按钮，为那个元素id
+		url : "{:url('admin/imageUpload/index')}?type=upload", //服务器端的上传页面地址
+		flash_swf_url : 'Moxie.swf', //swf文件，当需要使用swf方式进行上传时需要配置该参数
+		silverlight_xap_url : 'Moxie.xap', //silverlight文件，当需要使用silverlight方式进行上传时需要配置该参数
+		filters: {
+			max_file_size: '100mb',
+			//最大上传文件大小（格式100b, 10kb, 10mb, 1gb）
+			mime_types: [ //允许文件上传类型
+				{
+					title: "files",
+					extensions: "jpg,png,gif"
+				}]
+		},
+		multi_selection: false,
+		//true:ctrl多文件上传, false 单文件上传
+		init: {
+			FilesAdded: function(up, files) { //文件上传前
+				uploader.start();
+			},
+			UploadProgress: function(up, file) { //上传中，显示进度条
+
+			},
+			FileUploaded: function(up, file, info) { //文件上传成功的时候触发
+				var res = JSON.parse(info.response);
+				if(res.code == 1){
+					$('#bnb-img').attr('src',("{$path.bnb_thumb_path}"+res.data.url));
+					$('#bnb-img').css({'width':'100%','height':'180px','margin-top':'-50px'});
+					localStorage.setItem("bnb_img", res.data.url); //设置键的值
+					mui.alert('民宿照片上传成功');
+				}else{
+					mui.alert('民宿照片上传失败！');
+				}
+
+			},
+			Error: function(up, err) { //上传出错的时候触发
+			}
+		}
+	});
+	uploader.init();
+	//提交审核
+	$('.btn_big_orange1').click(function(){
+		$.ajax({
+			url:"{:url('index/landlord/addBnb')}",
+			type:'post',
+			data:{bnb_img:localStorage.getItem("bnb_img")},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					mui.alert('提交审核成功','操作提示',function(){
+						window.location.href = "{:url('index/users/index')}"
+					});
+				}else{
+					mui.alert('提交审核失败','错误提示');
+				}
+			}
+		});
+	});
+</script>
+{/block}

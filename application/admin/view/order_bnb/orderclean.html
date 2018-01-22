@@ -1,0 +1,71 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+
+                    <table id="table" class="table table-striped table-bordered table-hover table-bind-landlord"  width="100%">
+                        <thead>
+                            <th><input class="check-btn-all" type="checkbox" name="ids[]" value=""></th>
+                            <th width="200">购买单号</th>
+                            <th width="200">支付单号</th>
+                            <th width="200">状态</th>
+                            <th width="200">保洁次数</th>
+                            <th width="200">价格</th>
+                            <th width="200">金额</th>
+                            <th width="200">下单时间</th>
+                            <th width="200">支付时间</th>
+                        </thead>
+                        <tbody>
+                        {foreach name="row" item="v"}
+                        <tr>
+                            <td><input class="check-btn" id="check-{$vo.id}" type="checkbox" name="ids[]"  value="{$v.id}"></td>
+                            <td>{$v.clean_order_sn}</td>
+                            <td>
+                                {notempty name="v['pay_sn']"}
+                                    {$v.pay_sn}
+                                {else/}
+                                    未支付
+                                {/notempty}
+                            </td>
+                            <td>
+                                {switch name="v['status']"}
+                                    {case value="0"}已取消{/case}
+                                    {case value="10"}订单生成{/case}
+                                    {case value="20"}审核完成{/case}
+                                    {case value="30"}支付成功{/case}
+                                    {case value="40"}预约成功{/case}
+                                    {case value="50"}订单完成{/case}
+                                {/switch}
+                            </td>
+                            <td>{$v.clean_numbers}</td>
+                            <td>
+                                {if $v['price'] gt 0}
+                                    {$v.price}
+                                {else/}
+                                    免费赠送
+                                {/if}
+                            </td>
+                            <td>
+                                {$v.clean_order_total}
+                            </td>
+                            <td>
+                                {:date('Y-m-d H:i:s',$v['order_time'])}
+                            </td>
+                            <td>
+                                {notempty name="v['pay_sn']"}
+                                    {:date('Y-m-d H:i:s',$v['pay_time'])}
+                                {/notempty}
+                            </td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,235 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+    <header class="mui-bar mui-bar-nav">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">{$bnbData.name}（图片预览）</h1>
+    </header>
+    <!--图片轮换-->
+    <div id="slider" class="mui-slider" style="position:relative;margin-top:44px;">
+        {php}$imageNum = count($images);{/php}
+        <!--<div class="biaoqian_box" style="display:none;">1/{$imageNum}</div>-->
+        <div class="mui-slider-group mui-slider-loop">
+            <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+            {if $imageNum gt 1}
+            {php}
+                $endImage = end($images);
+            {/php}
+            <div class="mui-slider-item mui-slider-item-duplicate">
+                <a href="#">
+                    <img src="{$path.bnb_path}{$endImage.url}" data-preview-src="" data-preview-group="1" />
+                </a>
+            </div>
+            {/if}
+            {foreach name="images" item="v" key="k"}
+                {php}$k = $k+1;{/php}
+                <div class="mui-slider-item">
+                    <div class="biaoqian_box">{$k}/{$imageNum}</div>
+                    <a href="#">
+                        <img src="{$path.bnb_path}{$v.url}" data-preview-src="" data-preview-group="1" />
+                    </a>
+                </div>
+            {/foreach}
+            <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+            {if $imageNum gt 1}
+            <div class="mui-slider-item mui-slider-item-duplicate">
+                <a href="#">
+                    <img src="{$path.bnb_path}{$images[0]['url']}" data-preview-src="" data-preview-group="1" />
+                </a>
+            </div>
+            {/if}
+        </div>
+		<div style="position:absolute;top:25%;right:5%;">
+			<img src="/bnb_imgs/icon_08.png" id="collect">
+		</div>
+    
+    </div>
+    <!--图片轮换/-->
+    
+    <div class="xiangqing_top_txt">
+        <div class="touxiang">
+            <!--<div class="img_top">-->
+                <!--<a href="#">-->
+                    <!--<img src="{$path.avatar_path}{$landlord.avator}">-->
+                <!--</a>-->
+            <!--</div>-->
+            <!--<a href="tel:{$landlord.contact_mobile}" class="btn_orange">联系房东</a>-->
+        </div>
+        <div class="txt_left">
+            <h3><span class="black-fc">{$bnbData.name}</span></h3>
+            <p class="mt5 mb5"><span class="fs-16 fw gray-fc2">￥{$price}/晚</span>
+        </div>
+    </div>
+    <div class="mui-row tc mt20 mb20 gray-fc1">
+        <div class="mui-col-xs-3 ">
+            <i class="iconfont fs-30">&#xe82b;</i>
+            </br>
+            <p class="fs-14 gray-fc1 mt10">整套房屋</p>
+        </div>
+        <div class="mui-col-xs-3">
+            <i class="iconfont fs-30">&#xe7dc;</i>
+            </br>
+            <p class="fs-14 gray-fc1 mt10">宜住{$bnbData.room_people}人</p>
+        </div>
+        <div class="mui-col-xs-3">
+            <i class="iconfont fs-30">&#xe699;</i>
+            </br>
+            <p class="fs-14 gray-fc1 mt10">{$bnbData.room_bed}张床</p>
+        </div>
+        <div class="mui-col-xs-3">
+            <i class="iconfont fs-30">&#xe74a;</i>
+            </br>
+            <p class="fs-14 gray-fc1 mt10">{$bnbData.room_toilet}个卫生间</p>
+        </div>
+    </div>
+    
+    <div class="xiangqing_content">
+        <div class="border_b pt10 pb10 pl15 pr15">
+            <span class="fw fs-15 gray-fc2">房源简介</span>
+        </div>
+        <div class="p15 fs-14 gray-fc2">
+            {$bnbData.demo_content}
+        </div>
+    </div>
+    {if $evaluateNum gt 0}
+    <div class="xiangqing_content">
+        <div class="border_b pt10 pb10 pl15 pr15">
+                    <span class="fw fs-15 gray-fc2">
+                    评论({$evaluateNum})条
+                    </span>
+            <a href="{:url('index/evaluate/index',['bnbId'=>$bnbData['id']])}" target="_blank" class="fs-14 fr">
+                <i class="iconfont yellow-fc">&#xe60c;</i> 综合评价 {$evaluateData.score}
+                <i class="iconfont">&#xe60a;</i>
+            </a>
+        </div>
+        <div class="p15 fs-14 gray-fc2">
+            <div class="pingjia_touxiang">
+                <img src="{$path.avatar_path}{$evaluateData.user_avatar}">
+            </div>
+            <div class="pingjia_txt">
+                <div class="top_txt">
+                    <span class="fs-16">{$evaluateData.user_nickname}</span>
+                    <span class="fr gray-fc">{$evaluateData.in_date}入住</span>
+                </div>
+                <p class="gray-fc1 fs-15">{$evaluateData.evaluate}</p>
+    
+            </div>
+    
+        </div>
+    </div>
+    {/if}
+    <div class="xiangqing_content">
+        <div class="border_b pt10 pb10 pl15 pr15">
+            <span class="fw fs-15 gray-fc2">交通位置</span>
+            <input type="hidden" name="city" id="cityCode" value="{$bnbData.area_city_code}">
+            <input type="hidden" name="lng" id="lng" value="{$bnbData.map_lng}">
+            <input type="hidden" name="lat" id="lat" value="{$bnbData.map_lat}">
+        </div>
+        <div class="p15 fs-14 gray-fc2" id="maps" style="height:150px;">
+
+        </div>
+    </div>
+    {notempty name="featureData"}
+    <div class="xiangqing_content">
+        <div class="border_b pt10 pb10 pl15 pr15">
+            <span class="fw fs-15 gray-fc2">便利设施</span>
+        </div>
+        <div class="p15 fs-14 gray-fc2">
+    
+            <div class="mui-row tc">
+                {foreach name="featureData" item="vo"}
+                <div class="mui-col-xs-3">
+                    <i class="iconfont fs-22">&#xe653;</i>
+                    </br>{$vo.name}
+                </div>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+    {/notempty}
+    <div class="xiangqing_content">
+        <div class="border_b pt10 pb10 pl15 pr15">
+            <span class="fw fs-16 gray-fc2">入住规则</span>
+        </div>
+        <div class="p15 fs-14 gray-fc2">
+            {:htmlspecialchars_decode($bnbData['traffic_content'])}
+        </div>
+    </div>
+    
+    <!--占位-->
+    <div style="height: 44px;"></div>
+    <!--占位/-->
+    
+    <div class="biaoqian_bottom">
+        <div class="btn_left">
+            <div class="border_r">
+                <i class="iconfont fs-18">&#xe649;</i>
+                <p>在线客服</p>
+            </div>
+        </div>
+        <div class="btn_left">
+            <div class="border_r">
+                <i class="iconfont fs-18">&#xe671;</i>
+                <p>平台热线</p>
+            </div>
+        </div>
+        <a href="{:url('index/bnb/order',['bnb_id'=>$bnbData['id']])}" class="btn_zhengqing">申请预约</a>
+    </div>
+{/block}
+    <!--mui通用-->
+{block name="script"}
+    <!--mui图片放大-->
+    <script src="/bnb_js/mui.js"></script>
+    <script src="/bnb_js/mui.zoom.js"></script>
+    <script src="/bnb_js/mui.previewimage.js"></script>
+    <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.0&key=c7bcea605dd2b749f423ae8d45d1aa4b"></script>
+    <script src="/bnb_js/index/map.js"></script>
+{/block}
+{block name="js"}
+<script>
+    var city = $('#cityCode').val();
+    var directionName = $('#area_address').val();
+    var lat = $('#lat').val();
+    var lng = $('#lng').val();
+
+    var direction = {
+        lat:lat,
+        lng:lng
+    };
+    getLatLng(city,directionName,'maps','lat','lng',lat,lng);
+    var map = showMaps(direction,'maps');
+    setPosition(direction,map,'lat','lng');
+    //图片预览放大
+    mui.previewImage();
+
+
+    //图片自动轮播
+    var gallery = mui('.mui-slider');
+    gallery.slider({
+        interval: 3000 //自动轮播周期，若为0则不自动播放，默认为0；
+    });
+
+    //解决a标签失效图片自动轮播
+    mui('body').on('tap', 'a', function() {
+        document.location.href = this.href;
+    });
+
+    $('#collect').click(function(){
+        var id = "{$bnbData.id}";
+        $.ajax({
+            url:"{:url('index/bnb/collect')}",
+            type:'post',
+            data:{id:id},
+            dataType:'json',
+            success:function(result){
+                if(result.code == 1){
+                    mui.toast('收藏成功');
+                }else{
+                    mui.toast(result.msg);
+                }
+            }
+        });
+    });
+
+</script>
+{/block}
+{block name="foot"}{/block}

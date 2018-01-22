@@ -1,0 +1,96 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div style="width:78%;padding:40px 0 30px 30px;background-color:#fff;">
+        <input id="ids"  class="form-control" name="ids"  type="hidden" value="{$row.id}" >
+
+            <div class="form-group" style="float:left;">
+                <label for="truename" class="control-label col-xs-12 col-sm-2"  style="width:100px;padding-top:5px;">{:__('Truename')
+                    }:</label>
+                <div class="col-xs-12 col-sm-8  col-width" >
+                    <input id="truename"  class="form-control" name="row[truename]" {notempty name="row['truename']"}value="{$row.truename}"{else/}value="未填写"{/notempty}  readonly>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+
+
+            <div class="form-group" style="float:left;">
+                <label for="nickname" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">年龄:</label>
+                <div class="col-xs-12 col-sm-8 col-width" >
+                    <span class="form-control">{$row.age}</span>
+                </div>
+            </div>
+            <div class="form-group" style="float:left;">
+                <label for="truename" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">性别:</label>
+                <div class="col-xs-12 col-sm-8  col-width" >
+                    <span class="form-control">{eq name="row['sex']" value="1"}男{else/}女{/eq}</span>
+                </div>
+            </div>
+            <div class="form-group" style="float:left;">
+                <label for="truename" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">申请类型:</label>
+                <div class="col-xs-12 col-sm-8  col-width" >
+                    <span class="form-control">{eq name="row['type']" value="1"}保洁{else/}房东{/eq}</span>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+
+
+        <div class="form-group">
+            <label for="status" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">{:__('Status')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                {:build_radios('row[status]', [1=>__('Normal'),0=>__('Hidden'),-1=>__('Deleted'),2=>'已处理'], $row['status'])}
+            </div>
+        </div>
+        <div style="clear:both;"></div>
+        <div class="form-group">
+            <label for="contact-mobile" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">{:__('Mobile')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <span class="form-control">{notempty name="row['contact_mobile']"}{$row.contact_mobile}{else/}未填写{/notempty}</span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="idcard_number" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">身份证号:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <span class="form-control">{notempty name="row['idcard_number']"}{$row.idcard_number}{else/}暂无{/notempty}</span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        {notempty name="row['province_code']"}
+        <div class="form-group">
+            <label for="district" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">地区位置:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+               <span class="form-control" style="width:300px;">{$row.province_name} {$row.city_name} {$row.street}</span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        {/notempty}
+        <div class="form-group">
+            <label for="createtime" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">申请时间:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <span class="form-control">{:date('Y-m-d H:i:s',$row['createtime'])}</span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div class="form-group">
+            <label for="updatetime" class="control-label col-xs-12 col-sm-2" style="width:100px;padding-top:5px;">更新时间:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+               <span class="form-control">{:date('Y-m-d H:i:s',$row['updatetime'])}</span>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+
+    </div>
+</div>

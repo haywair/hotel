@@ -1,0 +1,77 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div class="mui-input-row" style="background: #fff;">
+		<input type="text" id="keys" data-key="{$nameVal}" class placeholder="请输入{$text}" style="border: 0; margin-top:
+		10px;">
+	</div>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<a href="#" class="btn_big_orange">保存</a>
+{/block}
+{block name="foot"}{/block}
+{block name="js"}
+	<script>
+		function msg(val,message,idDom){
+			if(!val) {
+				mui.alert(message, '错误提示', function () {
+					$('#' + idDom).focus();
+				});
+				return false;
+			}
+		}
+
+		$('.btn_big_orange').click(function(){
+			var keys = $('#keys').attr('data-key');
+			var inputVal = $('#keys').val();
+			var rules = /^[0-9]+$/;
+			switch(keys){
+				case "{$typeKeys.title}":
+					msg(inputVal,'请输入标题','keys');
+					break;
+				case "{$typeKeys.address}":
+					msg(inputVal,'请输入地址','keys');
+					break;
+				case "{$typeKeys.room}":
+					msg(inputVal,'请输入房型','keys');
+					break;
+				case "{$typeKeys.bed}":
+					msg(inputVal,'请输入床型','keys');
+					break;
+				case "{$typeKeys.people}":
+					msg(inputVal,'请输入最大可入住人数','keys');
+					if(!rules.test(inputVal)){
+						mui.alert("请输入数值", '错误提示', function () {
+							$('#keys').focus();
+						});
+						return false;
+					}
+					break;
+				case "{$typeKeys.price}":
+					msg(inputVal,'请输入价格','keys');
+					if(!rules.test(inputVal)){
+						mui.alert("请输入数值", '错误提示', function () {
+							$('#keys').focus();
+						});
+						return false;
+					}
+					break;
+			}
+			$.ajax({
+				url:"{:url('index/landlord/addStepOne')}",
+				type:'post',
+				data:{keys:keys,val:inputVal},
+				dataType:'json',
+				success:function(result){
+					if(result.code == 1){
+						window.location.href = "{:url('index/landlord/addBnb')}?type=add";
+					}else{
+						mui.alert("设置失败",'错误提示',function(){
+							$('#keys').focus();
+						});
+					}
+				}
+			});
+		});
+	</script>
+{/block}

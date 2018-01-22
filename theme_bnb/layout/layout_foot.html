@@ -1,0 +1,49 @@
+<div class="footer_nav">
+    <div class="mui-row tc">
+        <div class="mui-col-xs-3">
+            <a href="{:url('index/index/index')}">
+                <div class="nav_bj on">
+                    <div class="img_01">
+                        <div class="iconfont fs-18">&#xe618;</div>
+                    </div>
+                    <div class="txt_01">房源</div>
+                </div>
+            </a>
+        </div>
+        <div class="mui-col-xs-3">
+            <a href="{:url('index/order/index')}">
+                <div class="nav_bj">
+                    <div class="img_01">
+                        <div class="iconfont fs-18">&#xe602;</div>
+                    </div>
+                    <div class="txt_01">行程</div>
+                </div>
+            </a>
+        </div>
+        <div class="mui-col-xs-3">
+            <a href="{:url('index/message/index')}">
+                <div class="nav_bj">
+                    <!--有消息时显视圆点-->
+                    {gt name='messageNum' value="0"}
+                        <div class="yuandian"></div>
+                    {/gt}
+                    <!--有消息时显视圆点/-->
+                    <div class="img_01">
+                        <div class="iconfont fs-20">&#xe600;</div>
+                    </div>
+                    <div class="txt_01">消息</div>
+                </div>
+            </a>
+        </div>
+        <div class="mui-col-xs-3">
+            <a href="{:url('index/users/index')}">
+                <div class="nav_bj">
+                    <div class="img_01">
+                        <div class="iconfont fs-18">&#xe62e;</div>
+                    </div>
+                    <div class="txt_01">我的</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

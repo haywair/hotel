@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <style>
+        #RangeDate_bg{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: rgba(0,0,0,0.5);
+            padding:20px 100px;
+            box-sizing: border-box;
+        }
+        #RangeDateFu{
+            min-width: 750px;
+            display: flex;
+            flex-wrap: wrap;
+            text-align: center;
+            font-size: 14px;
+            line-height: 25px;
+            color: #333;
+            background: #fff;
+            height: 100%;
+            width: 100%;
+            flex-direction: column;
+        }
+        .RangeDate_xinqiContainer{
+            height: 40px;
+            display: flex;
+            padding-right: 17px;
+        }
+        .RangeDate_xinqi{
+            width: 14%;
+            height: 40px;
+            line-height: 40px;
+            color: #666;
+        }
+        .RangeDate_title{
+            height: 36px;
+            line-height: 36px;
+            font-size: 14px;
+            color: #333;
+            background: #fafafa;
+            width: 100%;
+            border-bottom: 1px solid #eee;
+            border-top: 1px solid #eee;
+        }
+        .RangeDate_day{
+            cursor: pointer;
+            height: 48px;
+            width: 14%;
+            position: relative;
+            margin:1px 0;
+        }
+        .RangeDate_day:hover .RangeDate_editor{
+            display: block;
+        }
+        .RangeDate_editor{
+            position: absolute;
+            display: none;
+            right: 5px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: url("bianji.png") no-repeat center;
+            background-size: 15px 15px;
+        }
+        .RangeDate_editorCon{
+            display: none;
+            position: absolute;
+            right: 5px;
+            top: 0;
+            border: 1px solid #666;
+        }
+        .RangeDate_editorCon p{
+            padding-right: 10px;
+            font-size: 10px;
+            line-height: 16px;
+            color: #666;
+            padding-left: 5px;
+            margin: 0;
+            background-color: #eee;
+        }
+        .RangeDate_editorCon .RangeDate_editorSlt{
+            background:#eee url("yes.png") no-repeat right center;
+            background-size: 10px 10px;
+        }
+        #RangeDateFu .RangeDate_day input{
+            font-size: 10px;
+            height: 16px;
+            line-height: 16px;
+            color:#333;
+        }
+        #RangeDate_container{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            flex-wrap: wrap;
+        }
+        .RangeDate_head{
+            width: 100%;
+            background: #D1D1D1;
+            box-sizing: border-box;
+            text-align: left;
+            color: #666;
+            font-size: 16px;
+            border-bottom: 1px solid #eee;
+            padding: 6px 17px;
+        }
+        #RangeDate_weekDay{
+            width: 100px;
+        }
+        #RangeDate_dayInput{
+            width: 80%;
+            text-align: center;
+        }
+        .RangeDate_done{
+            color: #0091fe;
+            float: right;
+            height: 30px;
+            line-height: 30px;
+            border-radius: 4px;
+            border: 1px solid #0091fe;
+            padding:0 10px;
+        }
+        .RangeDate_week{
+            color: #f9957b;
+        }
+        .RangeDate_none{
+            display: none !important;
+        }
+        .RangeDate_bolck{
+            display: block !important;
+        }
+        .RangeDate_A1{
+            color: #a1a1a1;
+        }
+        .RangeDate_dayNo{
+            color:#a2a2a2;
+        }
+        #RangeDateFu .RangeDate_dayNo input{
+            color:#a2a2a2;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="test" readonly value="点我">
+</body>
+<script>
+    var arr=[];
+    window.RangeDate=function(RangeDateID ){
+        if($('#RangeDate_bg').length!=0){
+            document.querySelector('body').removeChild(document.querySelector('#RangeDate_bg'))
+        }
+        $('body').append(
+                '<div id="RangeDate_bg" class="RangeDate_none">'+
+                '<div id="RangeDateFu">'+
+                '<div class="RangeDate_head">'+
+                '<span>所有日期</span><input type="text" style="width: 100px;margin-right: 5px" class="RangeDate_allDay"><button id="RangeDate_allDay" style="margin-right: 20px">完成</button>'+
+                '<span>周六</span><input type="text" style="width: 100px;margin-right: 5px" class="RangeDate_weekSaturday"><button id="RangeDate_weekSaturday" style="margin-right: 20px">完成</button>'+
+                '<span>周日</span><input type="text" style="width: 100px;margin-right: 5px" class="RangeDate_weekSunday"><button id="RangeDate_weekSunday" style="margin-right: 20px">完成</button>'+
+                '<div class="RangeDate_done">'+
+                '完成'+
+                '</div>'+
+                '</div>'+
+                '<div class="RangeDate_xinqiContainer">'+
+                '<div class="RangeDate_xinqi RangeDate_week">日</div>'+
+                '<div class="RangeDate_xinqi">一</div>'+
+                '<div class="RangeDate_xinqi">二</div>'+
+                '<div class="RangeDate_xinqi">三</div>'+
+                '<div class="RangeDate_xinqi">四</div>'+
+                '<div class="RangeDate_xinqi">五</div>'+
+                '<div class="RangeDate_xinqi RangeDate_week">六</div>'+
+                '</div>'+
+                '<div id="RangeDate_container"></div>'+
+                '</div>'+
+                '</div>'
+        )
+
+        var today=new Date();
+        var fu=document.querySelector('#RangeDate_container');
+        var startWeek=new Date(today.getFullYear(),today.getMonth(),1). getDay();
+        var dayNum=32-(new Date(today.getFullYear(),today.getMonth(),32).getDate());
+        var monthNum= 0,flag= 1,RangeDate_start=true,RangeDate_end=true,RangeDate_startId='',RangeDate_endId='',RangeDate_center=[];
+        var prompt=document.createElement('div');
+        $(prompt).addClass('RangeDate_prompt')
+
+        function getDay(attr){
+            var monthTitle=document.createElement('div');
+            $(monthTitle).addClass('RangeDate_title');
+            monthTitle.innerHTML=new Date(today.getFullYear(),today.getMonth()+monthNum,1).getFullYear()+'年'+(new Date(today.getFullYear(),today.getMonth()+monthNum,1).getMonth()+1)+'月';
+            fu.appendChild(monthTitle);
+            var firstDay=document.createElement('div');
+            $(firstDay).addClass('RangeDate_day');
+            $(firstDay).attr('id','RangeDate_'+flag);
+            $(firstDay).attr('data-id',attr+'1');
+            $(firstDay).attr('status','1');
+            isWeek(firstDay,attr+'1');
+            flag++;
+            firstDay.style.marginLeft=startWeek*14+"%";
+            firstDay.style.width='14%';
+            firstDay.innerHTML='<div>1</div>';
+            $(firstDay).append('<input type="text" id="RangeDate_dayInput"><div class="RangeDate_editor"></div><div class="RangeDate_editorCon"><p class="RangeDate_editorSlt" style="border-bottom: 1px solid #666;">启用</p><p>禁用</p></div>');
+            $(firstDay).find('input').bind('change',function(){
+                if(isPrice($(this))){return};
+                getTarget();
+            });
+            $(firstDay).find('.RangeDate_editor').bind('click',function(){
+                $(this).siblings('.RangeDate_editorCon').addClass('RangeDate_bolck');
+            });
+            $(firstDay).find('.RangeDate_editorCon p').each(function(index,ele){
+                $(ele).bind('click',function(){
+                    $(this).addClass('RangeDate_editorSlt').siblings().removeClass('RangeDate_editorSlt').parent().removeClass('RangeDate_bolck');
+                    if(index==0){
+                        $(this).parents('.RangeDate_day').attr('status','1').removeClass('RangeDate_dayNo').find('input')[0].readOnly=false;
+                    }else{
+                        $(this).parents('.RangeDate_day').attr('status','0').addClass('RangeDate_dayNo').find('input')[0].readOnly=true;
+                    }
+                });
+            });
+            fu.appendChild(firstDay);
+            for(var i=2;i<=dayNum;i++){
+                var j=document.createElement('div');
+                $(j).addClass('RangeDate_day');
+                $(j).attr('id','RangeDate_'+flag);
+                flag++;
+                j.innerHTML='<div>'+i+'</div>';
+                $(j).append('<input type="text" id="RangeDate_dayInput"><div class="RangeDate_editor"></div><div class="RangeDate_editorCon"><p class="RangeDate_editorSlt" style="border-bottom: 1px solid #666;">启用</p><p>禁用</p></div>');
+                $(j).attr('data-id',attr+i);
+                $(j).attr('status','1');
+                isWeek(j,attr+i);
+                $(j).find('input').bind('change',function(){
+                    if(isPrice($(this))){return};
+                    getTarget();
+                });
+                $(j).find('.RangeDate_editor').bind('click',function(){
+                    $(this).siblings('.RangeDate_editorCon').addClass('RangeDate_bolck');
+                });
+                $(j).find('.RangeDate_editorCon p').each(function(index,ele){
+                    $(ele).bind('click',function(){
+                        $(this).addClass('RangeDate_editorSlt').siblings().removeClass('RangeDate_editorSlt').parent().removeClass('RangeDate_bolck');
+                        if(index==0){
+                            $(this).parents('.RangeDate_day').attr('status','1').removeClass('RangeDate_dayNo').find('input')[0].readOnly=false;
+                        }else{
+                            $(this).parents('.RangeDate_day').attr('status','0').addClass('RangeDate_dayNo').find('input')[0].readOnly=true;
+                        }
+                    });
+                });
+                fu.appendChild(j)
+            }
+            monthNum++;
+            startWeek=new Date(today.getFullYear(),today.getMonth()+monthNum,1).getDay();
+            dayNum=32-(new Date(today.getFullYear(),today.getMonth()+monthNum,32).getDate());
+        }
+        getDay(new Date(today.getFullYear(),today.getMonth()+1,1).getFullYear()+'-'+new Date(today.getFullYear(),today.getMonth()+1,1).getMonth()+'-');
+        getDay(new Date(today.getFullYear(),today.getMonth()+2,1).getFullYear()+'-'+new Date(today.getFullYear(),today.getMonth()+2,1).getMonth()+'-');
+        getDay(new Date(today.getFullYear(),today.getMonth()+3,1).getFullYear()+'-'+new Date(today.getFullYear(),today.getMonth()+3,1).getMonth()+'-');
+        getDay(new Date(today.getFullYear(),today.getMonth()+4,1).getFullYear()+'-'+new Date(today.getFullYear(),today.getMonth()+4,1).getMonth()+'-');
+        $('#RangeDate_'+new Date().getDate()+' div').eq(0).html('今天');
+        for(var i=new Date().getDate()-1;i>0;i--){
+            $('#RangeDate_'+i).attr('status','0');
+            $('#RangeDate_'+i).addClass('RangeDate_dayNo');
+            $('#RangeDate_'+i).find('input')[0].readOnly=true;
+            $('#RangeDate_'+i).find('.RangeDate_editor').remove();
+        }
+        $('#'+RangeDateID).bind('click',function(){
+            $('#RangeDate_bg').toggleClass('RangeDate_none');
+        });
+        $('#RangeDate_allDay').bind('click',function(){
+            if(isPrice($(this).siblings('input'))){return};
+            $('.RangeDate_day').each(function(index,ele){
+                $(ele).find('input').val($('#RangeDate_allDay').siblings('.RangeDate_allDay').val())
+            });
+            getTarget();
+        });
+        $('#RangeDate_weekSaturday').bind('click',function(){
+            if(isPrice($(this).siblings('input'))){return};
+            $('.RangeDate_saturday').each(function(index,ele){
+                $(ele).find('input').val($('#RangeDate_weekSaturday').siblings('.RangeDate_weekSaturday').val())
+            });
+            getTarget();
+        });
+        $('#RangeDate_weekSunday').bind('click',function(){
+            if(isPrice($(this).siblings('input'))){return};
+            $('.RangeDate_sunday').each(function(index,ele){
+                $(ele).find('input').val($('#RangeDate_weekSunday').siblings('.RangeDate_weekSunday').val())
+            });
+            getTarget();
+        });
+        $('.RangeDate_done').bind('click',function(){
+            $('#RangeDate_bg').toggleClass('RangeDate_none');
+        });
+        function isWeek(ele,attr){
+            if(new Date(attr).getDay() == 6){
+                $(ele).addClass('RangeDate_saturday');
+            }else if(new Date(attr).getDay() == 0){
+                $(ele).addClass('RangeDate_sunday');
+            }
+        }
+        function isPrice(ele){
+            if(/^[1-9]\d*(\.\d+)?$/.test(ele.val())){
+                return false;
+            }else {
+                alert('输入大于零的数字!');
+                $(ele).val('');
+                return true
+            }
+        }
+        function getTarget(){
+            arr=[];
+            $('.RangeDate_day').each(function(index,ele){
+                console.log($(ele).attr('status'))
+                if($(ele).attr('status') == '1'){
+                    arr.push({
+                        useDate:dealDate(new Date($(ele).attr('data-id'))),
+                        price:$(ele).find('input').val(),
+                        status:'1'
+                    })
+                }else if($(ele).attr('status') == '0'){
+                    arr.push({
+                        useDate:dealDate(new Date($(ele).attr('data-id'))),
+                        price:$(ele).find('input').val(),
+                        status:'0'
+                    })
+                }
+            })
+            console.log(JSON.stringify(arr));
+        }
+        function dealDate(date){
+            return date.getFullYear()+((date.getMonth()+1+'').length==1?'0'+(date.getMonth()+1):(date.getMonth()+1))+((date.getDate()+'').length==1?'0'+date.getDate():date.getDate())
+        }
+    }
+    window.RangeDate('test')
+
+    //数据格式
+    //[{"useDate":"20170401","price":"300","status":"0"},{"useDate":"20170402","price":"200","status":"0"},{"useDate":"20170403","price":"100","status":"0"},{"useDate":"20170404","price":"100","status":"1"},{"useDate":"20170405","price":"100","status":"1"},{"useDate":"20170406","price":"100","status":"1"},{"useDate":"20170407","price":"500","status":"1"},{"useDate":"20170408","price":"300","status":"1"},{"useDate":"20170409","price":"200","status":"0"},{"useDate":"20170410","price":"100","status":"0"},{"useDate":"20170411","price":"100","status":"1"},{"useDate":"20170412","price":"100","status":"1"},{"useDate":"20170413","price":"100","status":"1"},{"useDate":"20170414","price":"500","status":"1"},{"useDate":"20170415","price":"300","status":"1"},{"useDate":"20170416","price":"200","status":"0"},{"useDate":"20170417","price":"100","status":"0"},{"useDate":"20170418","price":"100","status":"1"},{"useDate":"20170419","price":"100","status":"1"},{"useDate":"20170420","price":"100","status":"1"},{"useDate":"20170421","price":"500","status":"1"},{"useDate":"20170422","price":"300","status":"1"},{"useDate":"20170423","price":"200","status":"0"},{"useDate":"20170424","price":"100","status":"0"},{"useDate":"20170425","price":"100","status":"1"},{"useDate":"20170426","price":"100","status":"1"},{"useDate":"20170427","price":"100","status":"1"},{"useDate":"20170428","price":"500","status":"1"},{"useDate":"20170429","price":"300","status":"1"},{"useDate":"20170430","price":"200","status":"0"},{"useDate":"20170501","price":"100","status":"1"},{"useDate":"20170502","price":"100","status":"1"},{"useDate":"20170503","price":"100","status":"1"},{"useDate":"20170504","price":"100","status":"1"},{"useDate":"20170505","price":"100","status":"1"},{"useDate":"20170506","price":"300","status":"1"},{"useDate":"20170507","price":"200","status":"1"},{"useDate":"20170508","price":"100","status":"1"},{"useDate":"20170509","price":"100","status":"1"},{"useDate":"20170510","price":"100","status":"1"},{"useDate":"20170511","price":"100","status":"1"},{"useDate":"20170512","price":"100","status":"1"},{"useDate":"20170513","price":"300","status":"1"},{"useDate":"20170514","price":"200","status":"1"},{"useDate":"20170515","price":"100","status":"1"},{"useDate":"20170516","price":"100","status":"1"},{"useDate":"20170517","price":"100","status":"1"},{"useDate":"20170518","price":"100","status":"1"},{"useDate":"20170519","price":"100","status":"1"},{"useDate":"20170520","price":"300","status":"1"},{"useDate":"20170521","price":"200","status":"1"},{"useDate":"20170522","price":"100","status":"1"},{"useDate":"20170523","price":"100","status":"1"},{"useDate":"20170524","price":"100","status":"1"},{"useDate":"20170525","price":"100","status":"1"},{"useDate":"20170526","price":"100","status":"1"},{"useDate":"20170527","price":"300","status":"1"},{"useDate":"20170528","price":"200","status":"1"},{"useDate":"20170529","price":"100","status":"1"},{"useDate":"20170530","price":"100","status":"1"},{"useDate":"20170531","price":"100","status":"1"},{"useDate":"20170601","price":"100","status":"1"},{"useDate":"20170602","price":"100","status":"1"},{"useDate":"20170603","price":"300","status":"1"},{"useDate":"20170604","price":"200","status":"1"},{"useDate":"20170605","price":"100","status":"1"},{"useDate":"20170606","price":"100","status":"1"},{"useDate":"20170607","price":"100","status":"1"},{"useDate":"20170608","price":"100","status":"1"},{"useDate":"20170609","price":"100","status":"1"},{"useDate":"20170610","price":"300","status":"1"},{"useDate":"20170611","price":"200","status":"1"},{"useDate":"20170612","price":"100","status":"1"},{"useDate":"20170613","price":"100","status":"1"},{"useDate":"20170614","price":"100","status":"1"},{"useDate":"20170615","price":"100","status":"1"},{"useDate":"20170616","price":"100","status":"1"},{"useDate":"20170617","price":"300","status":"1"},{"useDate":"20170618","price":"200","status":"1"},{"useDate":"20170619","price":"100","status":"1"},{"useDate":"20170620","price":"100","status":"1"},{"useDate":"20170621","price":"100","status":"1"},{"useDate":"20170622","price":"100","status":"1"},{"useDate":"20170623","price":"100","status":"1"},{"useDate":"20170624","price":"300","status":"1"},{"useDate":"20170625","price":"200","status":"1"},{"useDate":"20170626","price":"100","status":"1"},{"useDate":"20170627","price":"100","status":"1"},{"useDate":"20170628","price":"100","status":"1"},{"useDate":"20170629","price":"100","status":"1"},{"useDate":"20170630","price":"100","status":"1"},{"useDate":"20170701","price":"300","status":"1"},{"useDate":"20170702","price":"200","status":"1"},{"useDate":"20170703","price":"100","status":"1"},{"useDate":"20170704","price":"100","status":"1"},{"useDate":"20170705","price":"100","status":"1"},{"useDate":"20170706","price":"100","status":"1"},{"useDate":"20170707","price":"100","status":"1"},{"useDate":"20170708","price":"300","status":"1"},{"useDate":"20170709","price":"200","status":"1"},{"useDate":"20170710","price":"100","status":"1"},{"useDate":"20170711","price":"100","status":"1"},{"useDate":"20170712","price":"100","status":"1"},{"useDate":"20170713","price":"100","status":"1"},{"useDate":"20170714","price":"100","status":"1"},{"useDate":"20170715","price":"300","status":"1"},{"useDate":"20170716","price":"200","status":"1"},{"useDate":"20170717","price":"100","status":"1"},{"useDate":"20170718","price":"100","status":"1"},{"useDate":"20170719","price":"100","status":"1"},{"useDate":"20170720","price":"100","status":"1"},{"useDate":"20170721","price":"100","status":"1"},{"useDate":"20170722","price":"300","status":"1"},{"useDate":"20170723","price":"200","status":"1"},{"useDate":"20170724","price":"100","status":"1"},{"useDate":"20170725","price":"100","status":"1"},{"useDate":"20170726","price":"100","status":"1"},{"useDate":"20170727","price":"100","status":"1"},{"useDate":"20170728","price":"100","status":"1"},{"useDate":"20170729","price":"300","status":"1"},{"useDate":"20170730","price":"200","status":"1"},{"useDate":"20170731","price":"100","status":"1"}]
+
+</script>
+</html>

@@ -1,0 +1,143 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="user-more">
+        <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action=""  style="padding-top:50px;">
+
+            <div class="left-area">
+                <div class="form-group col-flo">
+                    <label for="name" class="control-label col-xs-12 col-sm-2 cos-120">名称:</label>
+                    <div class="col-xs-12 col-sm-8 col-width" >
+                        <input id="name"  class="form-control" name="row[name]" type="text" value="{$row.name}" readonly>
+                    </div>
+                </div>
+                <div class="form-group col-flo" style="margin-left:20px;">
+                    {php}$bnbType = config('voucher.voucher_bnb_type');{/php}
+                    <label  class="control-label col-xs-12 col-sm-2 cos-120">类型:</label>
+                    <div class="col-xs-12 col-sm-8 col-width" >
+                        {eq name="row['type']" value="$bnbType"}
+                            <input id="type"  class="form-control" name="row[type]" type="text" value="民宿"  readonly>
+                        {else}
+                            <input id="type"  class="form-control" name="row[type]" type="text" value="保洁"  readonly>
+                        {/eq}
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="left-area">
+                <div class="form-group  col-flo">
+                    <label for="status" class="control-label col-xs-12 col-sm-2 cos-120">状态:</label>
+                    <div class="col-xs-12 col-sm-8 col-width">
+                        {php}$state = intval($row['status'])+1;{/php}
+                        <input id="status"  class="form-control" name="row[status]" type="text"  value="{$statusList[$state]}"  readonly>
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="left-area">
+                <div class="form-group col-flo">
+                    <label for="clean_money" class="control-label col-xs-12 col-sm-2 cos-120">结算金额:</label>
+                    <div class="col-xs-12 col-sm-8 col-width">
+                        <input type="text" class="form-control" id="clean_money" name="row[clean_money]" {notempty name="row['clean_money']"}value="{$row.clean_money}"{else/}value="暂无"{/notempty} disabled />
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            {notempty name="row['price_over']"}
+                <div class="left-area">
+                    <div class="form-group col-flo" >
+                        <label for="order_sn" class="control-label col-xs-12 col-sm-2 cos-120">消费限制:</label>
+                        <div class="col-xs-12 col-sm-8 col-width" >
+                            <input type="text" class="form-control" id="price_over" name="row[price_over]" {notempty name="row['price_over']"}value="消费满 ￥{$row.price_over}"{else/}value="暂无"{/notempty}   disabled />
+                        </div>
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+            {/notempty}
+            <div class="left-area">
+                <div class="form-group col-flo">
+                    <label for="price_discount" class="control-label col-xs-12 col-sm-2 cos-120">优惠金额:</label>
+                    <div class="col-xs-12 col-sm-8 col-width">
+                        <input type="text" class="form-control" id="price_discount" name="row[price_discount]" value="{$row.price_discount}"  disabled />
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="left-area">
+                <div class="form-group col-flo">
+                    <label for="max_counter" class="control-label col-xs-12 col-sm-2 cos-120">发行数量:</label>
+                    <div class="col-xs-12 col-sm-8 col-width">
+                        <input type="text" class="form-control" id="max_counter" name="row[max_counter]" value="{$row.max_counter}"  disabled />
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="left-area">
+                <div class="form-group col-flo">
+                    <label for="user_get_counter" class="control-label col-xs-12 col-sm-2 cos-120">已发放数量:</label>
+                    <div class="col-xs-12 col-sm-8 col-width">
+                        <input type="text" class="form-control" id="user_get_counter" name="row[user_get_counter]" value="{$row.user_get_counter}"  disabled />
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="left-area">
+                <div class="form-group col-flo">
+                    <label for="user_use_counter" class="control-label col-xs-12 col-sm-2 cos-120">已使用数量:</label>
+                    <div class="col-xs-12 col-sm-8 col-width">
+                        <input type="text" class="form-control" id="user_use_counter" name="row[user_use_counter]" value="{$row.user_use_counter}"  disabled />
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            <div class="left-area">
+                <div class="form-group col-flo">
+                    <label  class="control-label col-xs-12 col-sm-2 cos-120">有效时间:</label>
+                    <div class="col-xs-12 col-sm-8 col-width" style="width:300px;">
+                        <input type="text" class="form-control"  value="{:date('Y-m-d',$row['start_time'])} - {:date('Y-m-d',$row['end_time'])}"  disabled />
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            {notempty name="orderData"}
+            <div class="left-area">
+                <div class="form-group col-flo">
+                    <label  class="control-label col-xs-12 col-sm-2 cos-120">最近使用订单:</label>
+                    <div class="col-xs-12 col-sm-8 order-voucher-div" >
+                        <table>
+                            <thead>
+                                <th width="300">订单号 </th>
+                                <th width="300">民宿名称 </th>
+                                <th width="250">订单时间 </th>
+                                <th width="100">订单金额 </th>
+                            </thead>
+                            <tbody>
+                                {foreach name="orderData" item="v"}
+                                <tr>
+                                    <td>{$v.order_sn}</td>
+                                    <td>{$v.name}</td>
+                                    <td>{$v.finish_time}</td>
+                                    <td>{$v.order_total}</td>
+                                </tr>
+                                {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="clear:both;"></div>
+            </div>
+            {/notempty}
+        </form>
+    </div>
+</div>

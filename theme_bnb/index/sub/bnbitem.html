@@ -1,0 +1,35 @@
+{if $bnb}
+
+{volist name="bnb.data" id="b"}
+<div class="list_box">
+    <a href="{:url('@index/bnb/bnbinfo',['id'=>$b['id']])}">
+        <div class="img_bj">
+            <img src="{$b['bnb_image']}">
+        </div>
+        <h3><span class="black-fc">{$b['name']}</span></h3>
+        <p class="mt5 mb5">
+            <span class="fs-16 fw gray-fc2">
+                ￥{$b['price']}起/晚
+            </span>
+        </p>
+    </a>
+
+    <div class="txt_box">
+        <a href="{:url('@index/bnb/bnbinfo',['id'=>$b['id']])}">
+            <div class="left_txt">
+                <p>整套出租 | {$b['room_bedroom']}客房 | {$b['room_bed']}床 | 可住{$b['room_people']}人</p>
+                <p>
+                    {if $b['numbers_score'] >0}
+                    评价 {$b['numbers_score']}
+                    {else/}
+                    暂无评价
+                    {/if}
+                    <span class="red-fc fs-12"><i class="iconfont">&#xe67a;</i>立即预定</span>
+                </p>
+            </div>
+        </a>
+    </div>
+</div>
+
+{/volist}
+{/if}

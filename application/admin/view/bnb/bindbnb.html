@@ -1,0 +1,63 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar" style="margin:15px;">
+                        {:build_toolbar('refresh')}
+                        <div class="bind-bnb-search">
+                            <input type="hidden" name="uid" id="uid" value="{$uid}">
+                            <input type="text" name="name" id="name" class="form-control bind-bnb-name" placeholder="请输入民宿名称">
+                            <select name='province' id="province" class="form-control bind-bnb-district">
+                                <option value=''>请选择省</option>
+                                {foreach name="provinces" key ="k" item="vo"}
+                                    <option value='{$k}'>{$vo}</option>
+                                {/foreach}
+                            </select>
+                            <select name='city' id="city" class="form-control bind-bnb-district" >
+                                <option value=''>请选择市</option>
+                                {foreach name="citys" key="k" item="vo"}
+                                    <option value='{$k}'>{$vo}</option>
+                                {/foreach}
+                            </select>
+                            <button type="button" class="btn btn-danger btn-submit" >搜索</button>
+                        </div>
+                    </div>
+                    <table id="table" class="table table-striped table-bordered table-hover table-bind-landlord"  width="100%">
+                        <thead>
+                            <th><input class="check-btn-all" type="checkbox" name="ids[]" value=""></th>
+                            <th>图片</th>
+                            <th>名称</th>
+                            <th>状态</th>
+                            <th>位置</th>
+                            <th>可容纳人数</th>
+                            <th>操作</th>
+                        </thead>
+                        <tbody>
+                        {notempty name="bnbData"}
+                        {foreach name="bnbData" item="vo"}
+                        <tr>
+                            <td><input class="check-btn" id="check-{$vo.id}" type="checkbox" name="ids[]"  value="{$vo.id}"></td>
+                            <td><img src="{$vo.bnb_image}" width="50" height="50"></td>
+                            <td>{$vo.name}</td>
+                            <td>{$vo.status}</td>
+                            <td>{$vo.province_name}{$vo.city_name}</td>
+                            <td>{$vo.room_people}</td>
+                            <td>
+                                <a href="javascript:void(0);" class="btn btn-success btn-more"  data-id="{$vo.id}">详情 </a>
+                            </td>
+                        </tr>
+                        {/foreach}
+                        {else/}
+                            <tr><td colspan="7">暂无相关记录</td></tr>
+                        {/notempty}
+                        </tbody>
+                    </table>
+                    <div id="page">{$page}</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

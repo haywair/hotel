@@ -1,0 +1,189 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="order-bnb-con">
+        <input id="ids"  class="form-control" name="ids"  type="hidden" value="{$row.id}" >
+        <div class="order-bnb-title rel-title">
+            <h2>订单信息表</h2>
+            <div class="ab-area">
+                {gt name="cleanNum['addon_clean_num']" value="0"}
+                    <span class="btn btn-success addonClean" data-order-sn="{$row.order_sn}">订单附加保洁订单</span>
+                {/gt}
+                {gt name="cleanNum['order_clean_num']" value="0"}
+                    <span class="btn btn-success orderClean" data-order-sn="{$row.order_sn}">用户预定订单</span>
+                {/gt}
+                {if in_array($row['status'],$noPayState)}
+                    <span class="btn btn-success savePay" data-order-sn="{$row.order_sn}">收到货款</span>
+                {/if}
+            </div>
+        </div>
+        <div class="form-group div-orderbnb-content " >
+            <p>
+                <span class="span-title">订单号：</span><span>{$row.order_sn}</span>
+                <span class="span-title">订单状态：</span><span>{$stateList[$row['status']]}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                {notempty name="row['cancel_time']"}
+                <span class="span-title">取消时间：</span><span class="span-content">{:date('Y-m-d H:i:s',$row['cancel_time'])}</span>
+                {/notempty}
+                {notempty name="row['order_time']"}
+                <span class="span-title">下单时间：</span><span>{:date('Y-m-d H:i:s',$row['order_time'])}</span>
+                {/notempty}
+                {notempty name="row['verify_time']"}
+                <span class="span-title">审核时间：</span><span>{:date('Y-m-d H:i:s',$row['verify_time'])}</span>
+                {/notempty}
+                {notempty name="row['pay_time']"}
+                <span class="span-title">支付时间：</span><span>{:date('Y-m-d H:i:s',$row['pay_time'])}</span>
+                {/notempty}
+                {notempty name="row['password_time']"}
+                <span class="span-title">发送密码时间：</span><span>{:date('Y-m-d H:i:s',$row['password_time'])}}</span>
+                {/notempty}
+                {notempty name="row['finish_time']"}
+                <span class="span-title">完成时间：</span><span>{:date('Y-m-d H:i:s',$row['finish_time'])}</span>
+                {/notempty}
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+           <p>
+               <span class="span-title">民宿名称：</span><span>{$row.name}123456</span>
+               <span class="span-title">位置：</span><span class="span-content">{$row.province_name}{$row.city_name}</span>
+           </p>
+        </div>
+
+        <div class="form-group div-orderbnb-content">
+            <p>
+                <span class="span-title">入住时间：</span><span>{$row.in_date} {$row.in_hour}</span>
+                <span class="span-title">离店时间：</span><span>{$row.out_date} {$row.out_hour}</span>
+                <span class="span-title">入住人数：</span><span class="span-content">{$row.people_numbers}人</span>
+
+            </p>
+        </div>
+
+        <div class="form-group div-orderbnb-content">
+            <p>
+                <span class="span-title">用户：</span><span class="span-content">{$row.user_nickname}</span>
+                <span class="span-title">联系人：</span><span class="span-content">{$row.contact_name}</span>
+                <span class="span-title">联系电话：</span><span>{notempty name="row['contact_phone']"}{$row
+                .contact_phone}{else/}未填写{/notempty}</span>
+                <span class="span-title">手机：</span><span>{$row.contact_mobile}</span>
+                <span class="span-title">邮箱：</span><span>{notempty name="row['contact_email']"}{$row
+                .contact_email}{else/}未填写{/notempty}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content">
+            <p>
+                <span class="span-title">备注：</span><span class="span-content">{notempty name="row['contact_content']"}{$row.contact_content}{else/}未填写{/notempty}</span>
+            </p>
+        </div>
+        {if $row['pay_sn'] and $row['trade_no']}
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">支付单号：</span><span>{$row.pay_sn}</span>
+                <span class="span-title">交易号：</span><span class="span-content">{$row.trade_no}</span>
+            </p>
+        </div>
+        {/if}
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">支付金额：</span><span>{$row.pay_total}</span>
+                <span class="span-title span-fee">订单原始金额：</span><span>{$row.order_original_total}</span><span>
+                (不含优惠信息、保证金、赔偿金)</span>
+                <span class="span-title span-fee">订单实际费用：</span><span >{$row.order_actually_total}</span><span>(包含保证金)</span>
+                <span class="span-title span-fee">订单总价：</span><span >{$row.order_total}</span><span>(包含含优惠信息，不含保证金、赔偿金)</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">房间费用：</span><span class="span-fee-content">{$row.room_amount}</span>
+                <span class="span-title span-fee">清洁费用：</span><span class="span-fee-content">{$row.clean_amount}</span>
+                <span class="span-title span-fee">服务费用：</span><span class="span-fee-content">{$row.service_amount}</span>
+                <span class="span-title span-fee">保证金金额：</span><span class="span-fee-content">{$row.deposit_order_total}</span>
+                <span class="span-title span-fee">优惠费用：</span><span class="span-fee-content">{$row.promotion_total}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p style="text-align:center;"><span class="span-title" style="color:#18bc9c;text-align:left;">免费保洁</span></p>
+            <p style="border:1px solid #e74c3c;border-radius:5px;width:96%;text-align:left;margin-left:2%;">
+                <span class="span-title">免费保洁次数：</span><span class="span-fee-content">{$row.free_clean_numbers}</span>
+                <span class="span-title span-fee">附加保洁次数：</span><span class="span-fee-content">{$row.addon_clean_numbers}</span>
+                <span class="span-title span-fee">单次保洁费用：</span><span class="span-fee-content">{$row.addon_clean_price}</span>
+                <span class="span-title span-fee">附加保洁费用：</span><span class="span-fee-content">{$row.addon_clean_amount}</span>
+            </p>
+        </div>
+        {notempty name="orderAddClean"}
+        <div class="form-group div-orderbnb-content" style="text-align:center;">
+            <p><span class="span-title" style="color:#e74c3c;text-align:left;">付费保洁</span></p>
+
+                {foreach name="orderAddClean" item="vo"}
+                <p style="border:1px solid #e74c3c;border-radius:5px;width:96%;text-align:left;margin-left:2%;">
+                    <span class="span-title">价格</span>
+                    <span class="span-fee-content">{if $vo['price'] gt 0}{$vo.price}{else/}赠送{/if}</span>
+                    <span class="span-title">预约时间：</span><span class="span-fee-content">{notempty name="vo['clean_time']"}{:date('Y-m-d H:i:s',$vo['clean_time'])}{else/}未指定{/notempty}</span>
+                    <span class="span-title">保洁员：</span><span class="span-fee-content">{notempty name="vo['user_truename']"}{$vo.user_truename}{else/}未分配{/notempty}</span>
+                    <span class="span-title">保洁订单号：</span><span>{$vo.clean_order_sn}</span>
+                    <span class="span-title">订单状态：</span><span class="span-fee-content">测试测试车</span>
+                </p>
+                {/foreach}
+
+        </div>
+        {/notempty}
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">保证金状态：</span><span class="span-fee-content">{$depositState[$row['deposit_state']]}</span>
+                <span class="span-title span-fee">预支保证金：</span><span class="span-fee-content">{$row.deposit_amount}</span>
+                <span class="span-title span-fee">扣除金额：</span><span class="span-fee-content">{$row.deposit_deduction_amount}</span>
+                <span class="span-title span-fee">退还金额：</span><span class="span-fee-content">{$row.deposit_return_amount}</span>
+                <span class="span-title span-fee">退还时间：</span><span>{:date('Y-m-d H:i:s',$row['deposit_return_time'])}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">扣除原因：</span><span class="span-content">{notempty name="row['deposit_deduction_reason']"}{$row.deposit_deduction_reason}{else/}无{/notempty}</span>
+            </p>
+        </div>
+        {notempty name="voucherData"}
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">优惠券：</span><span class="span-fee-content">{$voucherData.name}</span>
+                <span class="span-title">优惠金额：</span><span class="span-fee-content">{$row.voucher_amount}</span>
+                <span class="span-title span-fee">类型：</span><span class="span-fee-content">{eq name="voucherData['type']" value="1"}民宿{else/}保洁{/eq}</span>
+                <span class="span-title span-fee">优惠内容：</span>
+                <span >{notempty name="voucherData['price_over']"}满 <span >{$voucherData.price_over}</span>{/notempty} 减 {$voucherData.price_discount}
+                </span>
+                <span class="span-title">活动日期：</span>
+                <span>{:date('Y-m-d ',$voucherData['start_time'])}~~{:date('Y-m-d',$voucherData['end_time'])}</span>
+            </p>
+        </div>
+        {/notempty}
+        <div class="form-group div-orderbnb-content last-d" >
+            <p>
+                <span class="span-title">订单源：</span>
+                <span>
+                    {if $row['replaced_admin_id']}
+                        后台下单 操作员：{$admin}
+                        {if $row['replaced_source_id']}
+                        下单源：{$source}
+                        {else/}
+                        下单源：平台
+                        {/if}
+                    {else/}
+                        个人下单
+                    {/if}
+                </span>
+            </p>
+        </div>
+    </div>
+</div>

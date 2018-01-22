@@ -1,0 +1,40 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	{notempty name="voucherData"}
+	{foreach name="voucherData" item="v"}
+	<div class="mt10">
+		<div class="youhuijuan_bj">
+			<div class="left_bj fl">
+				<div class="mt25">
+				￥<span class=" mt25">{$v.price_discount}</span></br>
+				{eq name="v['type']" value="1"}
+					<span class="fs-14">民宿</span>
+				{else/}
+					<span class="fs-14">保洁</span>
+				{/eq}
+				</div>
+			</div>
+			<div class="right_txt">
+				{if $v['start_time'] && $v['end_time']}
+					<h3>有效期：{:date('Y-m-d',$v['start_time'])} - {:date('Y-m-d',$v['end_time'])}</h3>
+				{else/}
+					<h3>有效期：无限制</h3>
+				{/if}
+				<p>每次预定使用一张,限本人使用</p>
+				{if $v['price_over'] gt 0}
+					<p>消费额满 {$v['price_over']} 使用</p>
+				{/if}
+				<p>最终解释权归橙子民宿所有</p>
+			</div>
+		</div>
+	</div>
+	{/foreach}
+	{/notempty}
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+{/block}
+{block name="script"}
+	<!--mui通用-->
+	<script src="/bnb_js/mui.min.js"></script>
+{/block}

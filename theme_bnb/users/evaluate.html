@@ -1,0 +1,41 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	{notempty name="data"}
+		{foreach name="data" item="v"}
+		<div class="pingjia_box mb5">
+			<div class="pingjia_touxiang">
+				<img src="{$path.avatar_path}{$v.user_avatar}">
+			</div>
+			<div class="pingjia_txt">
+				<div class="top_txt">
+					<span style="font-size: 14px;">{$v.name}</span>
+					<span class="fr fs-14 ml5">
+						{$v.score}
+					</span>
+					<div class="pingjia_xingxing fr">
+						<div class="pingjia_xingxing_a" style="width: 50%;"></div>
+					</div>
+					<p>{$v.in_date}入住</p>
+				</div>
+				<p class="gray-fc1 fs-15">{$v.evaluate}</p>
+				{notempty name="v['images']"}
+				<ul class="mui-row mt10">
+					{foreach name="v['images']" item="vo"}
+						<li>
+							<a href="#"><img src="{$path.evaluate_path}{$vo.photo}"></a>
+						</li>
+					{/foreach}
+				</ul>
+				{/notempty}
+			</div>
+		</div>
+		{/foreach}
+	{/notempty}
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+{/block}
+{block name="script"}
+	<!--mui通用-->
+	<script src="/bnb_js/mui.min.js"></script>
+{/block}

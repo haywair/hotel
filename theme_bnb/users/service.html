@@ -1,0 +1,12 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div class="wode_top">服务协议</div>
+	<div class="wode_bj_xieyi">
+		<div class="p15" style="margin-top: 44px;">
+			{:htmlspecialchars_decode($serviceData['content'])}
+		</div>
+	</div>
+{/block}
+{block name="foot"}{/block}
+
+

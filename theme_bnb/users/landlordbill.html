@@ -1,0 +1,88 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div class="shouyi_top_bj">
+		<span class="fs-30 fw">{$list.usersNum}位房客</span><br>{:intval(date('m'))}月
+
+	</div>
+	<ul class="mui-table-view fs-15" style="margin-top: 150px; ">
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right ">
+				<div class="pt10 pb10">
+				 <img src="/bnb_imgs/icon_13.png" class="pingjia_icon1"><span class="ml5">已付</span>
+				<span class="fr pr20">￥{$list.orderTotal}</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right ">
+				<div class="pt10 pb10">
+				 <img src="/bnb_imgs/icon_14.png" class="pingjia_icon1"><span class="ml5">预计收入</span>
+				<span class="fr pr20">￥{$list.expectTotal}</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right ">
+				<div class="pt10 pb10">
+				 <img src="/bnb_imgs/icon_15.png" class="pingjia_icon1"><span class="ml5">总收入</span>
+				<span class="fr pr20">￥{$list.allTotal}</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right ">
+				<div class="pt10 pb10">
+				 <img src="/bnb_imgs/icon_16.png" class="pingjia_icon1"><span class="ml5">2017年支付总金额</span>
+				<span class="fr pr20 fw">￥{$list.yearTotal}</span>
+				</div>
+			</a>
+		</li>
+
+	</ul>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+
+	<div class="shouyi_box tc">
+		{notempty name="list['awardedTotal']"}
+			<span class="fs-13 gray-fc1">现有收益<span class="fs-16 fw black-fc ml5">{$list.awardedTotal}</span></span>
+		{else/}
+			<span class="fs-13 gray-fc1">暂无收益</span>
+		{/notempty}
+		<a class="btn_tixian">提现</a>
+	</div>
+{/block}
+{block name="foot"}{/block}
+{block name="script"}
+	<!--mui通用-->
+	<script src="/bnb_js/mui.min.js"></script>
+{/block}
+{block name="js"}
+<script>
+	$('.btn_tixian').click(function(){
+		//var btnArray = ['取消', '确定'];
+		mui.prompt('','请输入提现金额','提现',function(e){
+			if(e.index == 1){
+				var rule =  /^[0-9]+.?[0-9]*$/;
+				if(rule.test(e.value)){
+					$.ajax({
+						url:"{:url('index/users/withdraw')}",
+						type:'post',
+						data:{money:e.value},
+						dataType:'json',
+						success:function(result){
+							if(result.code == 1){
+								mui.toast('申请成功,请等待审核');
+							}else{
+								mui.toast(result.msg);
+							}
+						}
+					});
+				}else{
+					mui.toast('请输入大约0的数值');
+				}
+			}
+		});
+	});
+</script>
+{/block}

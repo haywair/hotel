@@ -1,0 +1,75 @@
+<form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+
+    {foreach name="data" item="vo"}
+
+    <div class="set-special-price">
+        <span style="display:none;" id="span_{$vo.id}">{$vo.price_type}</span>
+        <div class="con1" >
+            <div class="form-group week-area">
+                <label for="c-name" class="control-label col-xs-12 col-sm-2 lab-week-area">名称:</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="c-name" data-rule="required" class="form-control area-address"  name="row[name]" type="text" value="{$vo.name}">
+                </div>
+            </div>
+            <div class="form-group week-area" style="width:300px;">
+                <label for="c-price_type" class="control-label col-xs-12 col-sm-2 lab-week-area">类型:</label>
+                <div class="col-xs-12 col-sm-8" style="padding-top:5px;">
+                    <input type="radio" name="price_type_{$vo.id}[]" value="1" {eq name="vo['price_type']"
+                           value="1"}checked{/eq} data-id="{$vo.id}">时间段
+                    <input type="radio" name="price_type_{$vo.id}[]" value="2" {eq name="vo['price_type']"
+                           value="2"}checked{/eq} data-id="{$vo.id}">特定时间
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+        </div>
+        <div style="margin-left:60px;" >
+            {eq name="vo['price_type']" value="1"}
+                <div class="form-group week-area">
+                    <label for="c-begin_date" class="control-label col-xs-12 col-sm-2 lab-week-area">开始时间:</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <input id="c-begin_date_{$vo.id}" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="begin_date[]" type="text" value="{$vo.begin_date}">
+                    </div>
+                </div>
+                <div class="form-group week-area">
+                    <label for="c-end_date" class="control-label col-xs-12 col-sm-2 lab-week-area">结束时间:</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <input id="c-end_date_{$vo.id}" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="end_date[]" type="text" value="{$vo.end_date}">
+                    </div>
+                </div>
+            {else /}
+                <div class="form-group week-area">
+                    <label for="c-begin_date_{$vo.id}" class="control-label col-xs-12 col-sm-2 lab-week-area">特殊时间:</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <input id="c-begin_date_{$vo.id}" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="begin_date[]" type="text" value="{$vo.begin_date}">
+                    </div>
+                </div>
+                <div class="form-group week-area" id="endDate-{$vo.id}" style="display:none;">
+                    <label for="c-begin_date_{$vo.id}" class="control-label col-xs-12 col-sm-2 lab-week-area">开始时间:</label>
+                    <div class="col-xs-12 col-sm-8">
+                        <input id="c-begin_date_{$vo.id}" data-rule="required" class="form-control datetimepicker" data-date-format="YY-MM-DD" data-use-current="true" name="begin_date[]" type="text" value="{$vo.begin_date}">
+                    </div>
+                </div>
+            {/eq}
+            <div class="form-group week-area">
+                <label for="c-price_" class="control-label col-xs-12 col-sm-2 lab-week-area">价格:</label>
+                <div class="col-xs-12 col-sm-8">
+                    <input id="c-price_" data-rule="required" class="form-control area-address"
+                           name="row[area_address]"  type="text" value="{$vo.price}">
+                </div>
+            </div>
+            {php}
+                $today = time();
+                $begin = strtotime($vo['begin_date']);
+                $end = strtotime($vo['end_date']);
+            {/php}
+            {if ($today lt $begin) and ($today lt $end)}
+                <span class="edit-span" data-id="{$vo.id}"  data-act="edit">编辑</span>
+            {/if}
+            <span class="rm-span" data-act="edit" data-id="{$vo.id}">移除</span>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+    {/foreach}
+    <input type="hidden" id="bid" value="{$bid}">
+    <span class="add-span" style="float:left;margin:10px 20px;" data-act="add">添加</span>
+</form>

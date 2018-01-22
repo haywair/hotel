@@ -1,0 +1,59 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<body>
+
+	<div class="mui-input-row" style="background: #fff; margin-bottom: 1px; padding: 5px 0;">
+		<label>手机号</label>
+		<input type="text" id="mobile" name="mobile">
+	</div>
+	<!--<div class="mui-input-row" style="background: #fff;padding: 5px 0;">
+		<label>验证码</label>
+		<input type="text">
+		<a href="#" class="wode_yanzhengma">发送验证码</a>
+	</div>-->
+	<div class="p15">
+		<a href="#" class="btn_xiao_orange fl" id="sub-btn">提交</a>
+	</div>
+{/block}
+{block name="foot"}{/block}
+{block name="script"}
+<!--mui通用-->
+	<script src="/bnb_js/mui.min.js"></script>
+{/block}
+{block name="js"}
+<script>
+	//提交修改
+	$('#sub-btn').click(function(){
+		var mobileVal = $('#mobile').val();
+		var rule = /^1[34578]{1}\d{9}$/;
+		if(!mobileVal){
+			mui.alert(('请输入手机号码'),'错误提示',function(){
+				$('#mobile').focus();
+			});
+		}else if(!rule.test(mobileVal)){
+			mui.alert('请输入11位数字的手机号码','错误提示',function(){
+				$('#mobile').focus();
+			});
+		}else{
+			//提交修改
+			$.ajax({
+				url:"{:url('index/users/info')}",
+				type:'post',
+				data:{user_mobile:mobileVal},
+				dataType:'json',
+				success:function(result){
+					console.log(result);
+					if(result.code == 1){
+						mui.alert('','修改成功', function()
+						{
+							window.location.href="{:url('index/users/edit')}";
+						});
+					}else{
+						mui.alert(result.msg);
+					}
+				}
+			});
+		}
+	});
+</script>
+{/block}

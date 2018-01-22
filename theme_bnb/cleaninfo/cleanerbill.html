@@ -1,0 +1,67 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div class="shouyi_top_bj">
+		{$prevMonth}月总收入</br>
+		{if isset($data[$timeKey])}
+			<span class="fs-30 fw">{$data[$timeKey]['money']}</span>
+		{else/}
+			<span class="fs-30 fw">无收益</span>
+		{/if}
+	</div>
+
+	<ul class="mui-table-view fs-15" style="margin-top: 150px;">
+		{foreach name="data" item="v"}
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/cleaninfo/billDetail',['month'=>substr($v['month'],5)])}"
+			   class="mui-navigate-right ">
+				<div class="pt10 pb10">
+				{$v.month}月收益
+				<span class="fr pr20">￥{$v.money}</span>
+				</div>
+			</a>
+		</li>
+		{/foreach}
+	</ul>
+
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+
+	<div class="shouyi_box tc">
+		{if $extraMoney gt 0}
+			<span class="fs-13 gray-fc1">现有收益<span class="fs-16 fw black-fc ml5">￥{$extraMoney}</span></span>
+		{else/}
+			<span class="fs-13 gray-fc1">暂无收益</span>
+		{/if}
+		<a class="btn_tixian">提现</a>
+	</div>
+{/block}
+{block name="foot"}{/block}
+{block name="js"}
+<script>
+	$('.btn_tixian').click(function(){
+		mui.prompt('','请输入提现金额','提现',function(e){
+			if(e.index == 1){
+				var rule =  /^[0-9]+.?[0-9]*$/;
+				if(rule.test(e.value)){
+					$.ajax({
+						url:"{:url('index/cleaninfo/withdraw')}",
+						type:'post',
+						data:{money:e.value},
+						dataType:'json',
+						success:function(result){
+							if(result.code == 1){
+								mui.toast('申请成功,请等待审核');
+							}else{
+								mui.toast(result.msg);
+							}
+						}
+					});
+				}else{
+					mui.toast('请输入大约0的数值');
+				}
+			}
+		});
+	});
+</script>
+{/block}

@@ -1,0 +1,71 @@
+<form id="setInfo-form" class="form-horizontal" role="form" data-toggle="validator" method="POST"  action="">
+    {notempty name="row['id']"}
+        <input id="id"  class="form-control" name="row[id]"  type="hidden" value="{$row.id}" >
+    {/notempty}
+    <input type="hidden" name="row[users_id]" value="{$uid}">
+    <div class="form-group">
+        <label for="c-work" class="control-label col-xs-12 col-sm-2">职业:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-work" data-rule="required" class="form-control" name="row[work]" type="text" {notempty name="row['work']"}value="{$row.work}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="province" class="control-label col-xs-12 col-sm-2">省:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select name='row[province_code]' id="province" class="form-control ">
+                <option value=''>请选择省</option>
+                {foreach name="provinces" item="v" key="k"}
+                <option value='{$k}' {notempty name="row['province_code']"}{eq name="row['province_code']"  value="$k"}selected{/eq}{/notempty}>{$v}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="city" class="control-label col-xs-12 col-sm-2">市:</label>
+        <div class="col-xs-12 col-sm-8">
+            <select name='row[city_code]' id="city" class="form-control ">
+                <option value=''>请选择城市</option>
+                {foreach name="citys" item="v" key="k"}
+                <option value='{$k}' {notempty name="row['city_code']"}{eq name="row['city_code']" value="$k"}selected{/eq}{/notempty}>{$v}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="address" class="control-label col-xs-12 col-sm-2">详细地址:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="address" data-rule="required" class="form-control area-address" name="row[address]"  type="text" {notempty name="row['address']"}value="{$row.address}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-demo" class="control-label col-xs-12 col-sm-2">房东介绍:</label>
+        <div class="col-xs-12 col-sm-8">
+            <textarea id="c-demo" data-rule="required" class="form-control summernote" rows="5" name="row[demo]" cols="50">{notempty name="row['demo']"}{:htmlspecialchars_decode($row['demo'])}{/notempty}</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-money_total" class="control-label col-xs-12 col-sm-2">总结算金额:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-money_total" readonly class="form-control" name="row[money_total]" type="text"  {notempty name="row['money_total']"}value="{$row.money_total}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-money_out" class="control-label col-xs-12 col-sm-2">总提现金额:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-money_out" readonly class="form-control" name="row[money_out]" type="text" {notempty name="row['money_out']"}value="{$row.money_out}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="c-contact_mobile" class="control-label col-xs-12 col-sm-2">联系电话:</label>
+        <div class="col-xs-12 col-sm-8">
+            <input id="c-contact_mobile" data-rule="required,mobile" class="form-control" name="row[contact_mobile]"  type="text" {notempty name="row['contact_mobile']"} value="{$row.contact_mobile}"{/notempty}>
+        </div>
+    </div>
+    <div class="form-group layer-footer">
+        <label class="control-label col-xs-12 col-sm-2"></label>
+        <div class="col-xs-12 col-sm-8">
+            <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+            <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+        </div>
+    </div>
+</form>

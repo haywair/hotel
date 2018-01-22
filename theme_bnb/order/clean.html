@@ -1,0 +1,203 @@
+{extend name="./layout/site_layout" /}
+
+{block name="css"}
+<link rel="stylesheet" type="text/css" href="/bnb_js/datetimepicker/jquery.datetimepicker.css">
+<script type="text/javascript" src="/bnb_js/datetimepicker/moment.js"></script>
+<script type="text/javascript" src="/bnb_js/datetimepicker/jquery.datetimepicker.js"></script>
+
+<style>
+
+	.bottom_btn {
+		position: fixed; z-index: 99; bottom:0; width: 100%; line-height: 44px; color: #fff; text-align: center; float: left;
+	}
+
+	{if  $cleannumbers.nouse >0}
+	.clean_use {
+	width: {$precent}%; background: #f88223; line-height: 44px; color: #fff; text-align: center;float:left;
+	}
+	.clean_use:active{ background: #f77710;color: #fff;}
+
+	{/if}
+	.clean_buy {
+	width: {$precent}%; background: #f88223; line-height: 44px; color: #fff; text-align: center;float:left;
+	}
+	.clean_buy:active{ background: #f77710;color: #fff;}
+
+</style>
+{/block}
+
+{block name="content"}
+
+<header class="mui-bar mui-bar-nav">
+	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+	<h1 class="mui-title">房间保洁</h1>
+</header>
+
+<div class="xingcheng_list mb10" style="position:relative;margin-top:44px;">
+	<a href="{:url('@index/bnb/bnbinfo' ,['id'=>$bnb['id']])}">
+		<div class="img_left">
+			{notempty name="bnb.image"}
+			<img src="{$bnb.image}">
+			{else/}
+			<img src="/bnb_imgs/temp_01.png">
+			{/notempty}
+		</div>
+	</a>
+	<div class="content_right">
+		<div style="width: 100%;">
+			<h3>{$bnb.name}</h3>
+		</div>
+		<p>{:str_replace('-','/',$order['in_date'])} - {:str_replace('-','/',$order['out_date'])}</p>
+		<p>共{$order.night}晚 入住{$order.people_numbers}人</p>
+		<div style="width: 100%;">
+			<p>
+				<span class="fs-16 fw gray-fc2">￥{$order.pay_total}元(保证金￥{$order.deposit_amount}元)</span>
+			</p>
+		</div>
+	</div>
+</div>
+
+<div class="mui-table-view-cell" style="background-color:#fff;">
+	<a href="{:url('index/users/help')}" class="mui-navigate-right">
+		<div class="p5">
+			<i class="iconfont yellow-fc fs-20">&#xe8b7;</i>
+			<span class="ml5 fs-16">保洁信息</span>
+		</div>
+	</a>
+</div>
+
+<div class="mui-table-view-cell clean-info-area" >
+	<span class="clean-span-left">
+		<p>保洁价格：￥{$bnb.fee_clean}</p>
+
+			<p>免费次数：{$cleannumbers.free}次</p>
+			<p>购买次数：{$cleannumbers.user}次</p>
+			<p>已用次数：{$cleannumbers.used}次</p>
+			<p>可用次数：{$cleannumbers.nouse}次</p>
+	</span>
+</div>
+
+{if $order_list}
+
+<div class="mui-table-view-cell" style="background-color:#fff;">
+	<a href="#">
+		<div class="p5">
+			<i class="iconfont yellow-fc fs-20">&#xe8b7;</i>
+			<span class="ml5 fs-16">保洁订单</span>
+		</div>
+	</a>
+</div>
+
+<div class="mui-table-view-cell clean-info-area" >
+		{foreach name="order_list" item="v"}
+		<span class="clean-span-left" style="font-size: 14px;">
+			预约日期: {$v.date} 保洁状态：{$v.state}
+		</span>
+		{/foreach}
+</div>
+
+{/if}
+
+
+<div style="height: 44px;"></div>
+<div class="bottom_btn">
+	<a href="#"><div class="clean_buy" data-order-sn="{$order.order_sn}">购买</div></a>
+
+	{if $cleannumbers.nouse >0}
+	<a href="#"><div class="clean_use" data-order-sn="{$order.order_sn}">使用</div></a>
+	{/if}
+</div>
+
+
+<div id="motal"></div>
+<div id="input-area">
+    <div class="header">选择保洁日期
+    </div>
+    <div>
+        <input id='pickDateBtn' type="text" placeholder="请输入日期">
+        <span class="confirm-use" >确定</span>
+    </div>
+</div>
+
+{/block}
+
+
+{block name="js"}
+
+<script type="text/javascript">
+
+    $(function(){
+        var order_sn = "{$order.order_sn}";
+        $("#pickDateBtn").datetimepicker({
+            minView: "month",//设置只显示到月份
+            format : "Y-m-d",//日期格式
+            autoclose:true,//选中关闭
+            todayBtn: true,//今日按钮
+            timepicker:false
+        });
+        //购买
+        $('.clean_buy').click(function(){
+            var btnArray = ['取消', '确定'];
+            mui.prompt('', '请输入购买次数','购买保洁次数', btnArray, function(e) {
+                if (e.index == 1) {
+                    var re = /^[1-9]\d*$/;
+                    if(!re.test(e.value)){
+                        mui.toast('请输入大于0的正整数数值');
+                    }else{
+                        $.ajax({
+                            url:"{:url('index/orderClean/orderCleanNum')}",
+                            type:'post',
+                            data:{order_sn:order_sn,clean_numbers:e.value},
+                            dataType:'json',
+                            success:function(result){
+                                if(result.code == 1){
+                                    window.location.href = "{:url('index/orderClean/cleanNumPay')}?id="+result.data.clean_order_sn;
+                                }else{
+                                    mui.toast(result.msg);
+                                }
+                            }
+                        });
+                    }
+                }
+            })
+        });
+        //选择使用日期
+        $('.clean_use').click(function(){
+            $('#motal').show();
+            $('#input-area').show();
+        });
+        $('#motal').click(function(){
+            closeMotal();
+        });
+        //使用
+        $('.confirm-use').click(function(){
+            var order_date = $('#pickDateBtn').val();
+            closeMotal();
+            if(!order_date){
+                mui.toast('您还未选择预定时间');
+                return false;
+            }
+            $.ajax({
+                url:"{:url('index/orderClean/useClean')}",
+                type:'post',
+                data:{bnb_order_sn:order_sn,order_date:order_date},
+                dataType:'json',
+                success:function(result){
+                    if(result.code == 1){
+                        mui.toast('您已成功预约 '+order_date+'  当日保洁服务');
+                        window.location.reload();
+                    }else{
+                        mui.toast(result.msg);
+                    }
+                }
+            });
+        });
+        //关闭模态窗口
+        function closeMotal(){
+            $('#motal').hide();
+            $('#input-area').hide();
+        }
+    })
+
+</script>
+{/block}

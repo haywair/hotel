@@ -1,0 +1,86 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/info',['type'=>'avatar'])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">头像</span>
+					<div class="wode_touxiang fr">
+						{notempty name="userInfo['user_avatar']"}
+							<img src="{$path.avatar_path}{$userInfo.user_avatar}">
+						{else/}
+							<img src="/bnb_imgs/temp_00.png">
+						{/notempty}
+					</div>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/info',['type'=>'sex'])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">性别</span>
+					{eq name="userInfo['user_sex']" value="1"}
+						<span class="fr fs-14 gray-fc mr20">男</span>
+					{else/}
+						<span class="fr fs-14 gray-fc mr20">女</span>
+					{/eq}
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/info',['type'=>'age'])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">年龄</span>
+					{if $userInfo['user_age'] gt 0}
+						<span class="fr fs-14 gray-fc mr20">{$userInfo.user_age}</span>
+					{else/}
+						<span class="fr fs-14 gray-fc mr20">未填写</span>
+					{/if}
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/info',['type'=>'name'])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">实名</span>
+					{notempty name="userInfo['user_truename']"}
+						<span class="fr fs-14 gray-fc mr20">{$userInfo.user_truename}</span>
+					{else/}
+						<span class="fr fs-14 gray-fc mr20">未填写</span>
+					{/notempty}
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/info',['type'=>'mobile'])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">手机号</span>
+					{notempty name="userInfo['user_mobile']"}
+						<span class="fr fs-14 gray-fc mr20">{:mb_substr($userInfo['user_mobile'],0,3)}********</span>
+					{else/}
+						<span class="fr fs-14 gray-fc mr20">未填写</span>
+					{/notempty}
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/info',['type'=>'address'])}" class="mui-navigate-right">
+				<div class="p5">
+					<span class="ml5 fs-16">所在地</span>
+					{notempty name="userInfo['user_address']"}
+						<span class="fr fs-14 gray-fc mr20">{$userInfo.user_address}</span>
+					{else/}
+						<span class="fr fs-14 gray-fc mr20">未填写</span>
+					{/notempty}
+				</div>
+			</a>
+		</li>
+	</ul>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+{/block}
+{block name="script}
+	<!--mui通用-->
+	<script src="/bnb_js/mui.min.js"></script>
+{/block}

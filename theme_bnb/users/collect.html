@@ -1,0 +1,120 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	{notempty name="bnbData"}
+		<div id="collect">
+			{foreach name="bnbData" item="v"}
+				<div class="xingcheng_list">
+					<div class="img_left">
+						<img src="{$path.bnb_thumb_path}{$v.bnb_image}">
+					</div>
+					<div class="content_right">
+						<div style="width: 100%;">
+							<h3>{$v.name}</h3>
+						</div>
+						<!--<p>{$v.area_address}</p>
+						<p>宜居4人</p>-->
+						<div style="width: 100%;">
+							<span class="btn_gray_yuan fr cancelCollect" data-id="{$v.favoriteId}">取消收藏</span>
+							<p>{$v.area_address}</p>
+							<p>宜居4人</p>
+							<p>
+								<span class="fs-16 fw gray-fc2">￥{$v.price}</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			{/foreach}
+		</div>
+	{else/}
+		<p class="tc"><img src="/bnb_imgs/img_03.png"></p>
+	{/notempty}
+
+
+	<!--占位-->
+	<div style="height: 44px;" id="stage"></div>
+	<!--占位/-->
+{/block}
+{block name="script"}
+	<!--mui通用-->
+	<script src="/bnb_js/mui.min.js"></script>
+{/block}
+{block name="js"}
+<script>
+	var page = 1;
+	var path = "{$path.bnb_thumb_path}";
+	mui.init({
+		pullRefresh : {
+			container:'body',//待刷新区域标识，querySelector能定位的css选择器均可，比如：id、.class等
+			up : {
+				height:50,//可选.默认50.触发上拉加载拖动距离
+				auto:false,//可选,默认false.自动上拉加载一次
+				contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+				contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+				callback :function(){
+					var pageTotal = "{$total}";
+					if(page < pageTotal){
+						getData();
+
+					}else{
+						mui('body').pullRefresh().endPullupToRefresh(true);
+					}
+				}
+			}
+
+		}
+	});
+	mui('body').on('tap','a',function(){document.location.href=this.href;});
+	function getData(){
+		page = page+1;
+		$.ajax({
+			url:'collect',
+			type:'get',
+			data:{page:page},
+			dataType:'json',
+			success:function(result){
+				var resData = JSON.parse(result.data);
+				$('body').attr('data-page',page);
+				html = '';
+				$.each(resData.data,function(i,item){
+					html += '<div class="xingcheng_list"><div class="img_left"><img src="';
+					html += path+item.bnb_image;
+					html += '"></div><div class="content_right"><div style="width: 100%;"><h3>';
+					html += item.name;
+					html += '</h3></div><div style="width: 100%;"><a href="#" class="btn_gray_yuan fr cancelCollect" data-id="';
+					html += item.favoriteId;
+					html += '">取消收藏</a><p><span class="fs-16 fw gray-fc2">￥';
+					html += item.price;
+					html += '</span></p></div></div></div>';
+
+				});
+				$('.mui-pull-bottom-pocket').before(html);
+				mui('body').pullRefresh().endPullupToRefresh(false);
+			}
+		})
+	}
+	//取消收藏
+	mui("body").on('tap','.cancelCollect',function(){
+		var data_id = $(this).attr('data-id');
+		if(data_id){
+			$.ajax({
+				url:"{:url('index/users/cancelCollect')}",
+				type:'post',
+				data:{id:data_id},
+				dataType:'json',
+				success:function(result){
+					console.log(result);
+					if(result.code == 1){
+						mui.toast('取消收藏成功');
+						var timeOut = setTimeout(function(){
+							window.location.reload();
+						},3000);
+					}else{
+						mui.toast(result.msg);
+					}
+				}
+			});
+		}
+	});
+
+</script>
+{/block}

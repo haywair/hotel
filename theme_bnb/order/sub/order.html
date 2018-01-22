@@ -1,0 +1,50 @@
+{foreach name="order" item="v"}
+
+<div class="xingcheng_list" >
+    <div class="img_left" class="toDetail"  data-sn="{$v.order_sn}">
+        <img src="{$v['bnb_image']}">
+    </div>
+    <div class="content_right ">
+        <div style="width: 100%;" class="toDetail"  data-sn="{$v.order_sn}">
+            <a href="#" class="fr ml10">
+                <span class="yellow-fc fs-14">{$v['status']}</span>
+            </a>
+            <h3 class="toDetail"  data-sn="{$v.order_sn}">{$v.bnb_name}</h3>
+        </div>
+        <p class="toDetail"  data-sn="{$v.order_sn}">{$v.in_date} - {$v.out_date}</p>
+        <p class="toDetail"  data-sn="{$v.order_sn}">共{$v.night}晚 {$v.people_numbers}人</p>
+
+        <div style="width: 100%;">
+
+            {if isset($v['operate']['cancel'])}
+            <a href="#" class="btn_orange_yuan fr toCancel"  data-sn="{$v.order_sn}" data-state="cancel">{$v['operate']['cancel']}</a>
+            {/if}
+
+            {if isset($v['operate']['delete'])}
+            <a href="#" class="btn_orange_yuan fr toDelete"  data-sn="{$v.order_sn}" data-state="delete">{$v['operate']['delete']}</a>
+            {/if}
+
+            {if isset($v['operate']['pay'])}
+            <a href="#" class="btn_orange_yuan fr toPay"  data-sn="{$v.order_sn}" data-state="pay">{$v['operate']['pay']}</a>
+            {/if}
+
+            {if isset($v['operate']['clean'])}
+            <a href="#" class="btn_orange_yuan fr toClean"  data-sn="{$v.order_sn}" data-state="clean">{$v['operate']['clean']}</a>
+            {/if}
+
+            {if (isset($v['operate']['evaluate']) && (!$v['is_evaluate']))}
+            <a href="#" class="btn_orange_yuan fr toEvaluate"  data-sn="{$v.order_sn}" data-state="evaluate">{$v['operate']['evaluate']}</a>
+            {/if}
+
+            {if isset($v['operate']['orderagain'])}
+            <a href="#" class="btn_orange_yuan fr toOrderagain"  data-sn="{$v.order_sn}" data-bnb_id="{$v.bnb_id}" data-state="orderagain">{$v['operate']['orderagain']}</a>
+            {/if}
+
+            <p>
+                <span class="fs-16 fw gray-fc2">￥{$v.pay_total}元</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+{/foreach}

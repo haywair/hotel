@@ -1,0 +1,44 @@
+<div role="tabpanel" class="tab-pane active" id="con_135">
+    <div class="col-md-12" style="padding: 0;">
+        <!-- Custom Tabs -->
+        <div class="nav-tabs-custom" style="margin:0">
+            <ul class="nav nav-tabs">
+                {php}$i=1;{/php}
+                {foreach $config_list as $key=>$item}
+                <li class="{if 1==$i++}active{/if}"><a href="#{$key}" data-toggle="tab" aria-expanded="true">{$item}</a></li>
+                {/foreach}
+                <!--<li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Dropdown <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class=""><a href="#tab_1" data-toggle="tab" aria-expanded="false">Tab 1</a></li>
+                    </ul>
+                </li>-->
+            </ul>
+            <div class="tab-content" style="padding: 0">
+                {php}$i=1;{/php}
+                {foreach $config_list as $key=>$item}
+                <div class="tab-pane {if 1==$i++}active{/if}" id="{$key}">
+                    <div class="tab-content tab-addtabs" style="min-height: 600px; height: 777px;">
+                        <div role="tabpanel" class="tab-pane active">
+                            <iframe src="/admin/general/{$key}?addtabs=1" width="100%" height="100%"
+                                    frameborder="no" border="0"
+                                    marginwidth="0" marginheight="0" scrolling-x="no" scrolling-y="auto"
+                                    allowtransparency="yes"></iframe>
+                        </div>
+                    </div>
+                </div>
+                {/foreach}
+                <!-- /.tab-pane -->
+            </div>
+            <!-- /.tab-content -->
+        </div>
+        <!-- nav-tabs-custom -->
+    </div>
+</div>
+<style>
+    .content {
+        padding: 0;
+    }
+</style>

@@ -1,0 +1,52 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div class="mui-input-row" style="background: #fff;">
+		<textarea id="textarea" rows="5" placeholder="请填写{$text}"  class="keys" data-key="{$nameVal}"  style="border: 0;"></textarea>
+	</div>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<a href="#" class="btn_big_orange">保存</a>
+{/block}
+{block name="foot"}{/block}
+{block name="js"}
+<script>
+	function msg(val,message,idDom){
+		if(!val) {
+			mui.alert(message, '错误提示', function () {
+				$('.' + idDom).focus();
+			});
+			return false;
+		}
+	}
+
+	$('.btn_big_orange').click(function(){
+		var keys = $('.keys').attr('data-key');
+		var inputVal = $('.keys').val();
+		var rules = /^[0-9]+$/;
+		switch(keys){
+			case "{$typeKeys.demo_content}":
+				msg(inputVal,'请输入房屋简介','keys');
+				break;
+			case "{$typeKeys.rules}":
+				msg(inputVal,'请输入入住规则','keys');
+				break;
+		}
+		$.ajax({
+			url:"{:url('index/landlord/addStepOne')}",
+			type:'post',
+			data:{keys:keys,val:inputVal},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					window.location.href = "{:url('index/landlord/addBnb')}?type=add";
+				}else{
+					mui.alert("设置失败",'错误提示',function(){
+						$('.keys').focus();
+					});
+				}
+			}
+		});
+	});
+</script>
+{/block}

@@ -1,0 +1,24 @@
+{notempty name="readMessages"}
+    {foreach name="readMessages" item="vo"}
+        {notempty name="vo['order_sn']"}
+            <a href="{$vo.url}">
+                {/notempty}
+                <div class="xiaoxi_list">
+                    <div class="img_left">
+                        <img src=" /bnb_imgs/icon_04.png">
+                    </div>
+                    <div class="content_right">
+                        <p>
+                            <span class="fs-16 black-fc">{$vo.type}消息</span>
+                            <span class="fs-13 gray-fc fr">{:date('Y-m-d H:i:s',$vo['createtime'])}</span>
+                        </p>
+                        <p>
+                            {$vo.msg_content}
+                        </p>
+                    </div>
+                </div>
+                {notempty name="vo['order_sn']"}
+            </a>
+        {/notempty}
+    {/foreach}
+{/notempty}

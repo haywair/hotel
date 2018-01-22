@@ -1,0 +1,61 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<input type="hidden" name="sex" id="sex">
+	<ul class="mui-table-view mui-table-view-radio">
+		{php}
+			if($userInfo['user_sex'] == 1){
+				$selectM = 'mui-selected';
+				$selectW = '';
+			}else{
+				$selectM = '';
+				$selectW = 'mui-selected';
+			}
+		{/php}
+		<li class="mui-table-view-cell {$selectM}" data-val="1">
+			<a class="mui-navigate-right">
+				男
+			</a>
+		</li>
+		<li class="mui-table-view-cell {$selectW}" data-val="2">
+			<a class="mui-navigate-right">
+				女
+			</a>
+		</li>
+	</ul>
+
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<a href="#" class="btn_big_orange">保存</a>
+{/block}
+{block name="foot"}{/block}
+{block name="script"}
+<!--mui通用-->
+<script src="/bnb_js/mui.min.js"></script>
+{/block}
+{block name="js"}
+	<script>
+		$('.mui-table-view-cell').click(function(){
+			$('.mui-table-view-cell').removeClass('mui-selected');
+			$(this).addClass('mui-selected');
+			var data_val = $(this).attr('data-val');
+			var sex = $('#sex').val(data_val);
+		});
+		$('.btn_big_orange').click(function(){
+			var sex = $('#sex').val();
+			$.ajax({
+				url:"{:url('index/users/info')}",
+				type:'post',
+				data:{user_sex:sex},
+				dataType:'json',
+				success:function(result){
+					console.log(result);
+					mui.alert('','修改成功', function()
+					{
+						window.location.href="{:url('index/users/edit')}";
+					});
+				}
+			});
+		});
+	</script>
+{/block}

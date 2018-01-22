@@ -1,0 +1,140 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bnb-more">
+    <form id="edit-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+        <ul class="bnb-more-btn">
+            <li id="bnb-info" data-type="{:config('bnb.action_info_type')}" data-text="{:config('bnb.action_info_text')}">房间信息</li>
+            <li id="position" data-type="{:config('bnb.action_district_type')}" data-text="{:config('bnb.action_district_text')}">修改位置</li>
+            <li id="bnb-type" data-type="{:config('bnb.action_living_type')}" data-text="{:config('bnb.action_living_text')}">房源类型</li>
+            <li id="weekprice">费用设置</li>
+            <li id="specialprice">活动价格设置</li>
+            <li id="settleprice" data-type="{:config('bnb.action_settleprice_type')}" data-text="{:config('bnb.action_settleprice_text')}">结算价格设置</li>
+            <li id="features-change" data-type="{:config('bnb.action_features_type')}"  data-text="{:config('bnb.action_features_text')}">房间设施</li>
+            <li id="lorduser-change" data-type="{:config('bnb.action_lord_type')}" data-text="{:config('bnb.action_lord_text')}">修改房东</li>
+            <li id="manageruser-change" data-type="{:config('bnb.action_manager_type')}"  data-text="{:config('bnb.action_manager_text')}">修改管理员</li>
+            <li id="bnb-image" data-type="{:config('bnb.action_image_type')}" data-text="{:config('bnb.action_image_text')}">展示图片</li>
+            <li id="bnb-listimage" data-type="{:config('bnb.action_listimage_type')}" data-text="{:config('bnb.action_listimage_text')}">房间图片</li>
+            <li id="bnb-clean-image" data-type="{:config('bnb.action_cleanimage_type')}"  data-text="{:config('bnb.action_cleanimg_text')}">房间保洁图片</li>
+            {eq name="row['status']" value="1"}
+                <li id="offsale" data-type="{:config('bnb.action_offsale_type')}"  data-text="{:config('bnb.action_offsale_text')}">下架</li>
+            {else}
+                <li id="offsale" data-type="{:config('bnb.action_offsale_type')}"  data-text="{:config('bnb.action_offsale_text')}">上架</li>
+            {/eq}
+            <li id="refundfee" data-type="{:config('bnb.action_refundfee_type')}"  data-text="{:config('bnb.action_refundfee_text')}">管理费设定</li>
+        </ul>
+
+        <input id="ids"  class="form-control" name="row[price_w5]"  type="hidden" value="{$row.id}" readonly>
+        <div class="form-group">
+            <label for="name" class="control-label col-xs-12 col-sm-2">房间名称:</label>
+            <div class="col-xs-12 col-sm-8 " style="width:300px;">
+                <input id="name"  class="form-control" name="row[name]"  value="{$row.name}" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="area" class="control-label col-xs-12 col-sm-2" >房间地区:</label>
+            <div class="col-xs-12 col-sm-8 col-width" >
+                <input id="area"  class="form-control" name="row[area]"  value="{$row.province_name} {$row.city_name}" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="manager_user" class="control-label col-xs-12 col-sm-2">管理员:</label>
+            <div class="col-xs-12 col-sm-8 col-width" >
+                {notempty name="row['username']"}
+                    <input id="manager_user"  class="form-control" name="row[area]" value="{$row.username}" readonly>
+                {else/}
+                    <input id="manager_user"  class="form-control" name="row[area]" value="未分配" readonly>
+                {/notempty}
+            </div>
+            <div class="col-xs-12 col-sm-8 col-width-320" >
+                <label for="lord_user" class="label-col" >房东:</label>
+                {notempty name="row['user_nickname']"}
+                    <input id="lord_user"  class="form-control input-label" name="row[area]"  value="{$row.user_nickname}" readonly>
+                {else/}
+                    <input id="lord_user"  class="form-control input-label" name="row[area]"  value="未分配" readonly>
+                {/notempty}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="state" class="control-label col-xs-12 col-sm-2" >{:__('Status')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                {neq name="$row['status']" value="0"}
+                    <input id="state"  class="form-control" name="row[status]"  value="{$statusList[$row['status']]}" readonly>
+                {else/}
+                    <input id="state"  class="form-control" name="row[status]"  value="下架" readonly>
+                {/neq}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-room_people" class="control-label col-xs-12 col-sm-2">{:__('Room_people')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input id="c-room_people" readonly class="form-control" name="row[room_people]"  type="number" value="{$row.room_people}" readonly>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-width-num">
+                <label for="c-room_bedroom" class="label-col-num">{:__('Room_bedroom')}:</label>
+                <input id="c-room_bedroom" readonly class="form-control input-label-num" name="row[room_bedroom]"  type="number" value="{$row.room_bedroom}" readonly>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-width-num">
+                <label for="c-room_livingroom" class="label-col-num">{:__('Room_livingroom')}:</label>
+                <input id="c-room_livingroom" readonly class="form-control input-label-num" name="row[room_livingroom]" type="number" value="{$row.room_livingroom}" readonly>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-width-num">
+                <label for="c-room_bed" class="label-col-num">{:__('Room_bed')}:</label>
+                <input id="c-room_bed" readonly class="form-control input-label-num" name="row[room_bed]" type="number"
+                       value="{$row.room_bed}" readonly>
+            </div>
+            <div class="col-xs-12 col-sm-8 col-width-num">
+                <label for="c-room_toilet" class="label-col-num">{:__('卫生间')}:</label>
+                <input id="c-room_toilet" readonly class="form-control input-label-num" name="row[room_toilet]"  type="number" value="{$row.room_toilet}" readonly>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="c-in_hour" class="control-label col-xs-12 col-sm-2">入住时间:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input id="c-in_hour" readonly class="form-control datetimepicker" data-date-format="HH:mm:ss" data-use-current="true" name="row[in_hour]" type="text" value="15:00" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-out_hour" class="control-label col-xs-12 col-sm-2">{:__('Out_hour')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input id="c-out_hour" readonly class="form-control datetimepicker" data-date-format="HH:mm:ss" data-use-current="true" name="row[out_hour]" type="text" value="12:00" readonly>
+            </div>
+        </div>
+        <div style="clear:both;"></div>
+        <div class="form-group">
+            <label for="c-fee_clean" class="control-label col-xs-12 col-sm-2">{:__('Fee_clean')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input id="c-fee_clean" readonly class="form-control" step="0.01" name="row[fee_clean]" type="number" value="{$row.fee_clean}" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-fee_deposit" class="control-label col-xs-12 col-sm-2">{:__('Fee_deposit')}:</label>
+            <div class="col-xs-12 col-sm-8 col-width">
+                <input id="c-fee_deposit" readonly class="form-control" step="0.01" name="row[fee_deposit]" type="number" value="{$row.fee_deposit}" readonly>
+            </div>
+        </div>
+        <div class="form-group">
+            <label  class="control-label col-xs-12 col-sm-2">房间图片:</label>
+            <ul class="col-xs-12 col-sm-8 image-area" style="height:auto;">
+                <li><img src="/{$imagePath}{$row.bnb_image}"></li>
+                {foreach name="images" item="vo"}
+                    <li><img src="/{$imagePath}{$vo.url}" alt="{$vo.name}"></li>
+                {/foreach}
+            </ul>
+        </div>
+    </form>
+    </div>
+</div>
+

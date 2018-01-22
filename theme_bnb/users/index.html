@@ -1,0 +1,101 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div class="wode_bj" style="padding: 50px 0;">
+		<a href="{:url('index/users/edit')}">
+		<div class="top_img">
+			{notempty name="users['avatar']"}
+				<img src="{$path.avatar_path}{$users.avatar}">
+			{else/}
+				<img src="{$path.avatar_path}temp_00.png">
+			{/notempty}
+		</div>
+		<p class="black-fc black-fc tc fs-18 mt10">{$users.nickname}</p>
+		</a>
+	</div>
+	<ul class="mui-table-view">
+		{eq name="userInfo['is_landlord']" value="1"}
+			<li class="mui-table-view-cell">
+				<a href="{:url('index/landlord/index')}" class="mui-navigate-right">
+					<div class="p5">
+						<img src="/bnb_imgs/icon_05.png" class="pingjia_icon">
+						<span class="ml5 fs-16">我是房东</span>
+					</div>
+				</a>
+			</li>
+		{else/}
+			<li class="mui-table-view-cell">
+				<a href="{:url('index/landlord/registerLandlord')}" class="mui-navigate-right">
+					<div class="p5">
+						<img src="/bnb_imgs/icon_05.png" class="pingjia_icon">
+						<span class="ml5 fs-16">成为房东</span>
+					</div>
+				</a>
+			</li>
+		{/eq}
+		{eq name="userInfo['is_cleaner']" value="1"}
+			<li class="mui-table-view-cell">
+				<a href="{:url('index/cleaninfo/index')}" class="mui-navigate-right">
+					<div class="p5">
+						<img src="/bnb_imgs/icon_05.png" class="pingjia_icon">
+						<span class="ml5 fs-16">我是保洁</span>
+					</div>
+				</a>
+			</li>
+		{else/}
+			<li class="mui-table-view-cell">
+				<a href="{:url('index/cleaninfo/registerCleaner')}" class="mui-navigate-right">
+					<div class="p5">
+						<img src="/bnb_imgs/icon_06.png" class="pingjia_icon">
+						<span class="ml5 fs-16">成为保洁</span>
+					</div>
+				</a>
+			</li>
+		{/eq}
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/pocket')}" class="mui-navigate-right">
+				<div class="p5">
+					<img src="/bnb_imgs/icon_07.png" class="pingjia_icon">
+					<span class="ml5 fs-16">我的钱包</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/collect')}" class="mui-navigate-right">
+				<div class="p5">
+					<img src="/bnb_imgs/icon_08.png" class="pingjia_icon">
+					<span class="ml5 fs-16">我的收藏</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/evaluate')}" class="mui-navigate-right">
+				<div class="p5">
+					<img src="/bnb_imgs/icon_03.png" class="pingjia_icon">
+					<span class="ml5 fs-16">我的点评</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/service')}" class="mui-navigate-right">
+				<div class="p5">
+					<img src="/bnb_imgs/icon_10.png" class="pingjia_icon">
+					<span class="ml5 fs-16">服务协议</span>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a href="{:url('index/users/help')}" class="mui-navigate-right">
+				<div class="p5">
+					<img src="/bnb_imgs/icon_11.png" class="pingjia_icon">
+					<span class="ml5 fs-16">帮助中心</span>
+				</div>
+			</a>
+		</li>
+	</ul>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+{/block}
+{block name="foot"}
+	{include file="../theme_bnb/layout/layout_foot.html" /}
+{/block}

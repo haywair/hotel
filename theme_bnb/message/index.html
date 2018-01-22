@@ -1,0 +1,101 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div style="padding: 0 20px;  background: #fff;     -webkit-box-shadow: 0 1px 6px #ccc; box-shadow: 0 1px 6px #ccc; ">
+		<div id="segmentedControl" class="mui-segmented-control mui-segmented-control-inverted mui-segmented-control-primary">
+			<a class="mui-control-item mui-active" href="#item1">未读</a>
+			<a class="mui-control-item" href="#item2">已读</a>
+		</div>
+	</div>
+	<div>
+		<div id="item1" class="mui-control-content mui-active">
+			{notempty name="noreadMessages"}
+				{foreach name="noreadMessages" item="vo"}
+					{notempty name="vo['order_sn']"}
+					<a href="{$vo.url}">
+					{/notempty}
+					<div class="xiaoxi_list">
+						<div class="img_left">
+							<img src=" /bnb_imgs/icon_04.png">
+						</div>
+						<div class="content_right">
+							<p>
+								<span class="fs-16 black-fc">{$vo.type}消息</span>
+								<span class="fs-13 gray-fc fr">{:date('Y-m-d H:i:s',$vo['createtime'])}</span>
+							</p>
+							<p>
+								{$vo.msg_content}
+							</p>
+						</div>
+					</div>
+					{notempty name="vo['order_sn']"}
+						</a>
+					{/notempty}
+				{/foreach}
+			{/notempty}
+		</div>
+
+		<div id="item2" class="mui-control-content">
+			<div id="message-history">
+				{$data['history']}
+			</div>
+		</div>
+		<div>
+			<!--占位-->
+			<div style="height: 44px;"></div>
+			<!--占位/-->
+		</div>
+	</div>
+{/block}
+{block name="js"}
+<link href="/bnb_js/dropload/dropload.css" rel="stylesheet" />
+<script type="text/javascript" src="/bnb_js/dropload/dropload.min.js"></script>
+<script type="text/javascript">
+	$(function () {
+		var bnbId = $('#bnbID').val();
+		var page_url = "{:url('@index/message')}";
+		var now_page = "{$pagedata['history']['page']}";
+		var now_next = "{$pagedata['history']['next']}";
+
+		$('#item2').dropload({
+			domDown: {
+				domClass: 'dropload-down',
+				domLoad: '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+				domNoData: '<div class="dropload-noData">已经没有更多数据了</div>'
+			},
+
+			scrollArea: window,
+
+			loadDownFn: function (me) {
+
+				if (now_next == "1") {
+					now_page++;
+
+					$.ajax({
+						type: 'POST',
+						url: page_url,
+						data: {now: 0, page: now_page},
+						dataType: 'json',
+						success: function (data) {
+							if (data.page) {
+								now_next = data.page.next;
+							}
+							if (data.data) {
+								$("#message-history").append(data.data);
+							}
+
+							me.resetload();
+						},
+						error: function (xhr, type) {
+							me.resetload();
+						}
+					});
+				}
+				else {
+					me.noData();
+					me.resetload();
+				}
+			}
+		});
+	});
+</script>
+{/block}

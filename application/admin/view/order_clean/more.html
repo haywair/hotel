@@ -1,0 +1,137 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="order-bnb-con" style="width:90%;min-height:900px;">
+        <input id="ids"  class="form-control" name="ids"  type="hidden" value="{$row.id}" >
+        <div class="order-bnb-title" style="position:relative;">
+            <h2>保洁订单信息表</h2>
+            {if in_array($row['status'],$progressState)}
+            <div class="ab-area">
+                <span class="btn btn-success toCleaner" data-order-sn="{$row.order_sn}">分配保洁员</span>
+            </div>
+            {/if}
+        </div>
+        <div class="form-group div-orderbnb-content " >
+            <p>
+                <span class="span-title">订单号：</span><span>{$row.order_sn}</span>
+                <span class="span-title">订单状态：</span><span>{$stateList[$row['status']]}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content " >
+            <p>
+                <span class="span-title">保洁员：</span><span>{$row.user_nickname}</span>
+                <span class="span-title">联系方式：</span><span>{$row.contact_mobile}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                {notempty name="row['order_time']"}
+                <span class="span-title">下单时间：</span><span>{:date('Y-m-d H:i:s',$row['order_time'])}</span>
+                {/notempty}
+                {notempty name="row['work_end_time']"}
+                <span class="span-title">工作完成：</span><span >{:date('Y-m-d H:i:s',$row['work_end_time'])}</span>
+                {/notempty}
+                {notempty name="row['clean_start_time']"}
+                <span class="span-title">开始时间：</span><span >{:date('Y-m-d H:i:s',$row['clean_start_time'])}</span>
+                {/notempty}
+                {notempty name="row['clean_end_time']"}
+                <span class="span-title">结束时间：</span><span >{:date('Y-m-d H:i:s',$row['clean_end_time'])}</span>
+                {/notempty}
+                {notempty name="row['verify_time']"}
+                <span class="span-title">审核时间：</span><span>{:date('Y-m-d H:i:s',$row['verify_time'])}</span>
+                {/notempty}
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">民宿名称：</span><span class="span-content">{$row.name}</span>
+                <span class="span-title">房间面积：</span><span class="span-content">{$row.room_space}</span>
+                <span class="span-title">位置：</span><span >{$row.province_name}{$row.city_name}{$row.address}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content">
+            <p>
+                <span class="span-title">备注：</span><span class="span-content">{notempty name="row['demo_content']"}{$row.demo_content}{else/}未填写{/notempty}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">金额：</span><span>{$row.fee_clean}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">审核员：</span><span class="span-content">{notempty name="row['nickname']"}{$row
+                .nickname}{else/}未审核{/notempty}</span>
+                {if $row['verify_score'] gt 0}
+                    <span class="span-title">审核评分：</span><span class="span-content">{$row.verify_score}</span>
+                {/if}
+                {if $row['fee_cleaner'] gt 0}
+                    <span class="span-title">结算费用：</span><span class="span-content">{$row.fee_cleaner}</span>
+                {/if}
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content" >
+            <p>
+                <span class="span-title">是否指定保洁：</span><span>{eq name="row['force_cleaner']" value="1"}指定{else/}不指定{/eq}</span>
+            </p>
+        </div>
+        <div class="form-group div-orderbnb-content {if !in_array($row['status'],$progressState)}last-d{/if}" >
+            <p>
+                <span class="span-title">是否图片对比：</span><span>{eq name="row['photo_compare']" value="1"}需要{else/}不需要{/eq}</span>
+            </p>
+        </div>
+        {if in_array($row['status'],$progressState)}
+        <div class="form-group div-orderbnb-content last-d" >
+            <div style="height:60px;padding:10px 0;">
+                <span class="span-title">图片对比：</span>
+            </div>
+            {notempty name="photoData"}
+            <ul>
+                {foreach name="photoData" item="v"}
+                <li class="compare-img-li" style="list-style:none;">
+                    <span class="clean-photo-bnb">
+                        <img src="{$path.bnb_clean_photo_path}{$v.image}"  >
+                        <p>保洁示范图</p>
+                    </span>
+                    {notempty name="v['upload_image']"}
+                    <span class="clean-photo-upload">
+                        <img src="{$path.upload_clean_photo_path}{$v.upload_image}">
+                        <p>保洁后效果</p>
+                    </span>
+                    {/notempty}
+                    <span class="clean-photo-verify">
+                        {notempty name="v['upload_image']"}
+                        {if $v['need_admin'] eq '1'}
+                            {if $v['admin_verify_state'] eq '0'}
+                                <button class="btn btn-success btn-verify" data-id="{$v.id}" data-state="success">审核通过</button>
+                                <button class="btn btn-danger btn-verify" data-id="{$v.id}" data-state="fail">审核不通过</button>
+                            {elseif $v['admin_verify_state'] eq '1'}
+                                <button class="btn btn-danger btn-verify" data-id="{$v.id}" data-state="fail">审核不通过</button>
+                            {elseif $v['admin_verify_state'] eq '2'}
+                                 <button class="btn btn-success btn-verify" data-id="{$v.id}" data-state="success">审核通过</button>
+                            {/if}
+                        {/if}
+                        {/notempty}
+                    </span>
+                    <div style="clear:both;"></div>
+                </li>
+                {/foreach}
+            </ul>
+            {/notempty}
+            <div class="clear"></div>
+        </div>
+        {/if}
+    </div>
+</div>

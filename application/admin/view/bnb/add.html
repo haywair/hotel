@@ -1,0 +1,154 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="bnb-add">
+    <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="" >
+        <div class="form-group">
+            <label for="c-weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-weigh" data-rule="required" class="form-control" name="row[weigh]" type="number" value="0">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-name" class="control-label col-xs-12 col-sm-2">{:__('Name')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-name" data-rule="required" class="form-control" name="row[name]" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-bnb_adwords" class="control-label col-xs-12 col-sm-2">{:__('Bnb_adwords')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-bnb_adwords" data-rule="required" class="form-control" name="row[bnb_adwords]" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-area_province_number" class="control-label col-xs-12 col-sm-2">{:__('Area_province_number')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                {:build_select('row[area_province_code]', $provinces, null, ['id'=>'c-area_province_number','class'=>'form-control
+                selectpicker','required'=>''])}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-area_city_number" class="control-label col-xs-12 col-sm-2">{:__('Area_city_number')}:</label>
+            <div class="col-xs-12 col-sm-8" id="city_code">
+                <select name='row[area_city_code]' id="c-area_city_number" class="form-control ">
+                    {foreach name="citys" item="v" key="k"}
+                    <option value='{$k}'>{$v}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-area_address_number" class="control-label col-xs-12 col-sm-2">详细地址:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-area_address_number" data-rule="required" class="form-control area-address"
+                       name="row[area_address]"  type="text">
+                <span id="getLatLng" >
+                    获取地图</span>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.0&key=c7bcea605dd2b749f423ae8d45d1aa4b"></script>
+        <script src="//webapi.amap.com/ui/1.0/main.js"></script>
+        <div class="form-group" id="lng-lat-area" style="display:none;">
+            <label for="c-area_city_number" class="control-label col-xs-12 col-sm-2">经纬度：</label>
+            <input type="hidden" name="row[map_lat]" id="lat">
+            <input type="hidden" name="row[map_lng]" id="lng">
+            <div class="col-xs-12 col-sm-8" id="maps" style="height:200px;">
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-features_ids" class="control-label col-xs-12 col-sm-2">{:__('Features_ids')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-features_ids" data-rule="required" data-source="features/index" data-multiple="true" class="form-control selectpage" name="row[features_ids]" type="text" value="">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-room_people" class="control-label col-xs-12 col-sm-2">{:__('Room_people')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-room_people" data-rule="required" class="form-control" name="row[room_people]" type="number" value="1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-room_bedroom" class="control-label col-xs-12 col-sm-2">{:__('Room_bedroom')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-room_bedroom" data-rule="required" class="form-control" name="row[room_bedroom]" type="number" value="1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-room_livingroom" class="control-label col-xs-12 col-sm-2">{:__('Room_livingroom')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-room_livingroom" data-rule="required" class="form-control" name="row[room_livingroom]" type="number" value="1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-room_bed" class="control-label col-xs-12 col-sm-2">{:__('Room_bed')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-room_bed" data-rule="required" class="form-control" name="row[room_bed]" type="number" value="1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-room_toilet" class="control-label col-xs-12 col-sm-2">{:__('Room_toilet')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-room_toilet" data-rule="required" class="form-control" name="row[room_toilet]" type="number" value="1">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-demo_content" class="control-label col-xs-12 col-sm-2">{:__('Bnb_content')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <textarea id="c-demo_content" data-rule="required" class="form-control summernote" rows="5"  name="row[demo_content]" cols="50"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-bnb_image" class="control-label col-xs-12 col-sm-2">{:__('Bnb_image')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <div class="input-group">
+                    <input id="c-bnb_image" data-rule="required" class="form-control" size="50" name="row[bnb_image]" type="text" value="">
+                    <div class="input-group-addon no-border no-padding">
+                        {:upload_image("upload",'bnb_image')}
+                    </div>
+                    <span class="msg-box n-right" for="c-bnb_image"></span>
+                </div>
+                <ul class="row list-inline plupload-preview" id="p-bnb_image"></ul>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-manager_user" class="control-label col-xs-12 col-sm-2">{:__('Manager_user')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <!--<input id="c-manager_user" data-rule="required" class="form-control" name="row[manager_user]" type="number" value="0">-->
+                {:build_select('row[manager_user]', $adminUsers, null, ['id'=>'c-manager_user','class'=>'form-control selectpicker','required'=>''])}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-in_hour" class="control-label col-xs-12 col-sm-2">{:__('In_hour')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-in_hour" data-rule="required" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-use-current="true" name="row[in_hour]" type="text" value="15:00">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-out_hour" class="control-label col-xs-12 col-sm-2">{:__('Out_hour')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-out_hour" data-rule="required" class="form-control datetimepicker" data-date-format="HH:mm:ss" data-use-current="true" name="row[out_hour]" type="text" value="12:00">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-fee_clean" class="control-label col-xs-12 col-sm-2">{:__('Fee_clean')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-fee_clean" data-rule="required" class="form-control" step="0.01" name="row[fee_clean]" type="number" value="0.00">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-fee_deposit" class="control-label col-xs-12 col-sm-2">{:__('Fee_deposit')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-fee_deposit" data-rule="required" class="form-control" step="0.01" name="row[fee_deposit]" type="number" value="0.00">
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="control-label col-xs-12 col-sm-2"></label>
+            <div class="col-xs-12 col-sm-8">
+                <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+                <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>

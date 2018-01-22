@@ -1,0 +1,33 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div class="dingdan_bj">
+		<span class="gray-fc">共保洁次数</span>
+		<span class="fr">{$data.clean_numbers}</span>
+	</div>
+	<div class="dingdan_bj">
+		<span class="gray-fc">赠送保洁次数</span>
+		<span class="fr">{$data.free_numbers}</span>
+	</div>
+	<div class="dingdan_bj">
+		<span class="gray-fc">保洁价格</span>
+		<span class="fr">￥{$data.price}</span>
+	</div>
+	<div class="dingdan_bj mt5">
+		<span class="gray-fc">金额</span>
+		<span class="fr">￥{$data.clean_order_total}</span>
+	</div>
+	<div class="dingdan_bj">
+		<span class="gray-fc">支付方式</span> 
+		<span class="fr">微信支付</span>
+	</div>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<a href="#" class="btn_big_orange">确定</a>
+{/block}
+{block name="foot"}{/block}
+{block name="script"}
+	<!--mui通用-->
+	<script src="/bnb_js/mui.min.js"></script>
+{/block}
+

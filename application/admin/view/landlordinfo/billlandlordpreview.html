@@ -1,0 +1,42 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar" style="margin:15px;">
+                        <div class="bind-bnb-search">
+                            <input type="hidden" name="uid" id="uid" value="{$uid}">
+                            <input type="text" name="name" id="name" class="form-control bind-bnb-name"  placeholder="请输入民宿名称" style="width:190px;" {notempty name="result['name']"}value="{$result.name}"{/notempty}>
+                            <input type="text" name="order_sn" id="order_sn" class="form-control bind-bnb-name"   placeholder="请输入保洁单号" style="width:190px;" {notempty name="result['order_sn']"}value="{$result.order_sn}"{/notempty}>
+                            <input type="date" name="bill_date" id="bill_date" class="form-control bind-bnb-name" placeholder="请输入结算日期" style="width:140px;" {notempty name="result['bill_date']"}value="{$result.bill_date}"{/notempty}>
+                            <button type="button" class="btn btn-danger btn-submit" >搜索</button>
+                        </div>
+                    </div>
+                    <table id="table" class="table table-striped table-bordered table-hover table-bind-landlord"  width="100%" style="margin-top:15px;">
+                        <thead>
+                            <th><input class="check-btn-all" type="checkbox" name="ids[]" value=""></th>
+                            <th>民宿</th>
+                            <th>订单号</th>
+                            <th>结算金额</th>
+                            <th>结算日期</th>
+                        </thead>
+                        <tbody >
+                        {foreach name="data" item="vo"}
+                        <tr>
+                            <td><input class="check-btn" id="check-{$vo.id}" type="checkbox" name="ids[]"  value="{$vo.id}"></td>
+                            <td>{$vo.name}</td>
+                            <td>{$vo.order_sn}</td>
+                            <td>{$vo.bnb_money}</td>
+                            <td>{$vo.bill_date}</td>
+                        </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
+                    <div id="page">{$page}</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

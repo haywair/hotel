@@ -1,0 +1,173 @@
+{extend name="./layout/site_layout" /}
+
+{block name="content"}
+<div class="yuding_box" style="margin: 15px 15px 0 15px; ">
+    <div class="mui-row pt10 pb10 pl15 pr15">
+        <a href="{:url('@index/index/city' ,['jump'=>1])}" data-city="{$city['code']}" id="city">
+            <i class="iconfont yellow-fc">&#xe614;</i>
+            <span>{$city['city']}</span>
+        </a>
+    </div>
+</div>
+<div class="yuding_box" style="margin: 10px 15px 0 15px; height:90px; ">
+    <div class="select-time">
+        <ul class="mui-row">
+            <li class="mui-col-xs-6 tc">
+                <div class="p10">
+                    <span>入住日期</span></br>
+                    <span class="time in_date_time fw yellow-fc fs-20"></span>
+                </div>
+            </li>
+            <li class="mui-col-xs-6 tc">
+                <div class="p10">
+                    <span>离开日期</span></br>
+                    <span class="time out_date_time fw yellow-fc fs-20"></span>
+                </div>
+            </li>
+        </ul>
+        <input type="hidden" name="hotel_date" id="hotel_date" value="{$search['begin_date']} - {$search['end_date']}">
+
+    </div>
+</div>
+<div class="yuding_box p5" style="margin: 10px 15px 0 15px; ">
+    <input type="text" placeholder="关键字/位置" style="border: 0; margin:0;" id="area_address"
+           value="{$search['keywords']}">
+</div>
+<div class="yuding_box p5" style="margin: 10px 15px 0 15px; ">
+    <span class="gray-fc1 fs-15 ml15 price" id="price">价格</span>
+    <a href="#pricePopover" class="tc" style="width: 44px; float: right;"><i class="iconfont gray-fc">&#xe601;</i>
+    </a>
+</div>
+
+<a href="" class="btn_big_orange" id="search">搜索</a>
+
+<input type="hidden" name="price_min" id="searchPrice_min" value="0">
+<input type="hidden" name="price_max" id="searchPrice_max" value="0">
+<input type="hidden" name="in_date" id="in_date" value="{$search['begin_date']}">
+<input type="hidden" name="out_date" id="out_date" value="{$search['end_date']}">
+
+
+<div id="pricePopover" class="mui-popover">
+    <div class="mui-popover-arrow"></div>
+    <div class="mui-scroll-wrapper" id="wrapper">
+        <div class="mui-scroll">
+            <ul class="mui-table-view">
+                {foreach name="pricelist" key="k" item="v"}
+                <li class="mui-table-view-cell">
+                    <a href="#" data-price_min="{$v['price'][0]}" data-price_max="{$v['price'][1]}" {if $v["default"]}data-select="1"{else/}data-select="0"{/if}
+                    >{$v['name']}</a>
+                </li>
+                {/foreach}
+            </ul>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="js"}
+<link href="/bnb_js/hotel-datepicker.css" rel="stylesheet"/>
+<script type="text/javascript" src="/bnb_js/fecha.js"></script>
+<script type="text/javascript" src="/bnb_js/hotel-datepicker.js"></script>
+
+
+<script>
+
+    $(function () {
+
+        // 初始化价格
+        $("#pricePopover li a").each(function () {
+            if ($(this).attr('data-select') == 1) {
+                setPrice($(this));
+            }
+        });
+
+        // 初始化日期
+        var indate = $("#in_date").val();
+        var outdate = $("#out_date").val();
+        setDate(indate, "in_date");
+        setDate(outdate, "out_date");
+
+        // 初始化日历
+        var hotel_date = new HotelDatepicker(document.getElementById('hotel_date'), {
+            enableCheckout: true,
+            autoClose: true,
+
+            startDate: "{$today}",
+            endDate: "{$max_date}",
+            showTopbar: false,
+            i18n: {
+                selected: '入住：',
+                night: '晚',
+                nights: '晚',
+                button: '关闭',
+                'day-names-short': ['日', '一', '二', '三', '四', '五', '六'],
+                'day-names': ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                'month-names-short': ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二'],
+                'month-names': ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                'info-default': '选择日期'
+            },
+
+            setValue: function (data) {
+                getHotelDate(data);
+            }
+        });
+
+        $(".select-time").click(function () {
+            hotel_date.open();
+        });
+
+        //选择价格
+        $('#pricePopover li a').click(function () {
+            setPrice($(this));
+            mui('#pricePopover').popover('toggle');
+        });
+
+
+        //搜索跳转
+        $('#search').click(function () {
+
+            var in_date = $('#in_date').val();
+            var out_date = $('#out_date').val();
+            var area_address = $('#area_address').val();
+            var price_min = $('#searchPrice_min').val();
+            var price_max = $('#searchPrice_max').val();
+            var city = $('#city').attr('data-city');
+            var url = "{:url('index/index/index')}?begin_date=" + in_date;
+            url += '&end_date=' + out_date + '&keywords=' + area_address + '&price_min=' + price_min + '&price_max=' + price_max + '&citycode=' + city;
+            window.location.href = url;
+            return false;
+
+        });
+
+        function setPrice(priceitem) {
+            $("#price").html("" + priceitem.html());
+            $("#searchPrice_min").val(priceitem.attr("data-price_min"));
+            $("#searchPrice_max").val(priceitem.attr("data-price_max"));
+        }
+
+        function setDate(date, domitem) {
+            var d = date.split("-");
+            if (d.length == 3) {
+                var dt = d[1] + "/" + d[2];
+                $("." + domitem + "_time").html(dt);
+            }
+        }
+
+
+        function getHotelDate(hoteldate) {
+            $("#hotel_date").val(hoteldate);
+            var date = hoteldate.split(" - ");
+
+            if (date.length == 2) {
+                $("#in_date").val(date[0]);
+                $("#out_date").val(date[1]);
+                setDate(date[0], "in_date");
+                setDate(date[1], "out_date");
+            }
+        }
+
+
+    });
+</script>
+
+{/block}

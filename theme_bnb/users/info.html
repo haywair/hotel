@@ -1,0 +1,77 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	{php}
+		if($type == 'age'){
+			$typeText = '年龄';
+		}else if($type == 'address'){
+			$typeText = '所在地';
+		}else if($type == 'name'){
+			$typeText = '姓名';
+		}
+	{/php}
+	<div class="mui-input-row" style="background: #fff;">
+		<input type="text" placeholder="请输入{$typeText}" data-type="{$type}" id="type" style="border: 0; margin-top:10px;">
+	</div>
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<a href="#" class="btn_big_orange">保存</a>
+{/block}
+{block name="foot"}{/block}
+{block name="script"}
+<!--mui通用-->
+<script src="/bnb_js/mui.min.js"></script>
+{/block}
+{block name="js"}
+<script>
+	//提交修改
+	$('.btn_big_orange').click(function(){
+		var type = $('#type').attr('data-type');
+		var data_val = $('#type').val();
+		var rule = /^[0-9]*[1-9][0-9]*$/;
+		var data = {};
+		switch(type){
+			case 'age':
+				$msg = '年龄';
+				data.user_age = data_val;
+				break;
+			case 'name':
+				$msg = '姓名';
+				data.user_truename = data_val;
+				break;
+			case 'address':
+				$msg = '所在地';
+				data.user_address = data_val;
+				break;
+		}
+		if(!data_val){
+			mui.alert(('请输入'+$msg),'错误提示',function(){
+				$('#type').focus();
+			});
+		}else if(type == 'age' && !rule.test(data_val)){
+			mui.alert('请输入大于0的整数值','错误提示',function(){
+				$('#type').focus();
+			});
+		}else{
+			//提交修改
+			$.ajax({
+				url:"{:url('index/users/info')}",
+				type:'post',
+				data:data,
+				dataType:'json',
+				success:function(result){
+					console.log(result);
+					if(result.code == 1){
+						mui.alert('','修改成功', function()
+						{
+							window.location.href="{:url('index/users/edit')}";
+						});
+					}else{
+                        mui.alert(result.msg);
+					}
+				}
+			});
+		}
+	});
+</script>
+{/block}

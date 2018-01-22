@@ -1,0 +1,25 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div style="width:78%;padding:40px 0 30px 30px;background-color:#fff;">
+            <input id="ids"  class="form-control" name="ids"  type="hidden" value="{$row.id}" >
+            <div class="form-group" style="float:left;">
+                <label for="truename" class="control-label col-xs-12 col-sm-2"  style="width:100px;padding-top:5px;">标题:</label>
+                <div class="col-xs-12 col-sm-8  col-width" >
+                    <input id="truename"  class="form-control" name="row[title]" {notempty name="row['title']"}value="{$row.title}"{else/}value="未填写"{/notempty}  readonly>
+                </div>
+            </div>
+            <div style="float:left;margin-left:200px;"><button class="btn btn-success addSelect">添加选项</button></div>
+            <div style="clear:both;"></div>
+            {notempty name="questionContents"}
+                {foreach name="questionContents" item="v"}
+                    <div class="form-group" style="margin-left:100px;padding-top:10px;">
+                        <span style="display:inline-block;padding:0 5px;font-size:20px;">{$v.title}</span>
+                        <span style="display:inline-block;padding:0 5px;font-size:20px;">{$v.content}</span>
+                        <span style="display:inline-block;padding:0 5px;font-size:20px;">(分值：{$v.score}分)</span>
+                        <span class="btn btn-success editSelect" data-id="{$v.id}" style="margin-left:10px;">修改</span>
+                        <span  class="btn btn-danger delSelect"  data-id="{$v.id}" style="margin-left:10px;">删除</span>
+                    </div>
+                {/foreach}
+            {/notempty}
+    </div>
+</div>

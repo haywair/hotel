@@ -1,0 +1,129 @@
+{extend name="./layout/site_layout" /}
+{block name="css"}
+	<style>
+		.mui-btn {
+			display: block;
+			width: 120px;
+			margin: 10px auto;
+		}
+
+		#info {
+			padding: 20px 10px;
+		}
+	</style>
+{/block}
+{block name="content"}
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">姓名</label>
+				<input type="text" placeholder="中文名" style="text-align: right;" id="name">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">手机</label>
+				<input type="text" placeholder="请输入11位手机号码" style="text-align: right;" id="contact-mobile">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">年龄</label>
+				<input type="text" placeholder="请填写" style="text-align: right;" id="age">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row mui-radio">
+				<label style="padding: 11px 0;float:left;">性别</label>
+				<div style="float:left;margin-left:4rem;">
+					<input type="radio" name="sex"  style="text-align: right;width:50px;position:relative;" value="1"  checked>男
+				</div>
+				<div style="float:left;margin-left:2rem;">
+				<input type="radio" name="sex"  style="text-align: right;width:50px;position:relative;" value="2" >女
+				</div>
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row">
+				<label style="padding: 11px 0;">地址</label>
+				<input type="text" placeholder="市/街道" style="text-align: right;" id="street">
+			</div>
+		</li>
+	</ul>
+	<h3 class="fs-18 gray-fc2 mt20"><img src="/bnb_imgs/logo.png" class="fangdong_img ml15 mr5">感谢您对橙子民宿关注：</h3>
+	<div class="fangdong_box">
+		<p>我们的要求，年龄30-55，无性别限制，每日12-15点有自由时间。</p>
+		<p>您提交信息后，客服人员会电话通知您面试。</p>
+		<p>请不要相信邮件等其它信息。</p>
+	</div>
+
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+
+
+	<a href="#" id='alertBtn' class="btn_big_orange">注册成为保洁</a>
+{/block}
+{block name="foot"}{/block}
+{block name="js"}
+	<script type="text/javascript" charset="utf-8">
+		//错误提示
+		function msg(message,idDom){
+			mui.alert(message,'错误提示',function(){
+				$('#'+idDom).focus();
+			});
+		}
+		//提交注册
+		function subForm(name,mobile,age,sex,street){
+			var data = {};
+			data.truename = name;
+			data.contact_mobile = mobile;
+			data.age = age;
+			data.sex = sex;
+			data.street = street;
+			$.ajax({
+				url:"{:url('index/cleaninfo/registerCleaner')}",
+				type:'post',
+				data:data,
+				dataType:'json',
+				success:function(result){
+					if(result.code == 1){
+						mui.alert('请等待我们客服人员的面试通知！', '欢迎您的加入！', function() {
+							window.location.href = "{:url('index/users/index')}";
+						});
+					}else{
+						mui.alert(result.msg,'错误信息');
+					}
+				}
+			});
+		}
+		document.getElementById("alertBtn").addEventListener('tap', function() {
+			var name = $('#name').val();
+			var mobile = $('#contact-mobile').val();
+			var age = $('#age').val();
+			var sex = $("input[type='radio']:checked").val();
+			var street = $('#street').val();
+			var ruleAge = /^[0-9]+$/;
+			var ruleName = /[^\u4e00-\u9fa5]/;
+			var ruleMobile = /^1[34578]{1}\d{9}$/;
+			if(!name){
+				msg('请输入业主姓名','name');
+			}else if(ruleName.test(name)){
+				msg('请输入中文姓名','name')
+			}else if(!mobile){
+				msg('请输入联系手机','contact-mobile');
+			}else if(!ruleMobile.test(mobile)){
+				msg('请输入11位手机号码','contact-mobile');
+			}else if(!age){
+				msg('请输入年龄','age');
+			}else if(!ruleAge.test(age)){
+				msg('请输入大于0的数字','age');
+			}else if(!street){
+				msg('请输入所在街道','street');
+			}else{
+				subForm(name,mobile,age,sex,street);
+			}
+		});
+
+	</script>
+{/block}

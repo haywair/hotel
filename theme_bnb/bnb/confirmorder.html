@@ -1,0 +1,218 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<div class="dingdan_bj">
+		<span class="gray-fc">入住人数</span>
+		<span class="fr">{$data['bnb']['order_room_people']}人</span>
+	</div>
+	<div class="dingdan_bj">
+		<span class="gray-fc">入住日期</span>
+		<span class="fr">{:str_replace('-','/',$data['date']['begin'])} - {:str_replace('-','/',$data['date']['end'])} 共{$data['date']['night']}晚</span>
+	</div>
+
+	<div class="dingdan_bj mt5">
+		<span class="gray-fc">房费总计</span>
+		<span class="fr">￥{$data.price.room_amount|money_formater}</span>
+	</div>
+
+	<div class="dingdan_bj mt5">
+		<span class="gray-fc">管理费</span>
+		<span class="fr">￥{$data.price.service_amount|money_formater}</span>
+	</div>
+
+	<div class="dingdan_bj">
+		<span class="gray-fc">押金</span>
+		<span class="fr">￥{$data.price.deposit_amount|money_formater}</span>
+	</div>
+
+	<div class="dingdan_bj">
+		<span class="gray-fc">优惠券</span>
+		<span class="fr gray-fc" data-voucherid="{$voucher.best.voucher_id}" id="voucher_text">-￥{$voucher.best.price_discount|money_formater}</span>
+
+		<a href="#voucherPopover" class="tc" style="width: 44px; float: right;">
+			<i class="iconfont gray-fc">&#xe601;</i>
+		</a>
+	</div>
+
+	<div class="dingdan_bj mt5">
+		<span class="gray-fc">支付总计</span>
+		<span class="fr" id="price_total"></span>
+	</div>
+
+	<div class="dingdan_bj mt5">
+		<span class="gray-fc">住宿意外险</span>
+		<span class="fr yellow-fc">免费赠送</span>
+	</div>
+
+	{notempty name="data.price.free_clean_numbers"}
+	<div class="dingdan_bj">
+		<span class="gray-fc">保洁</span>
+		<span class="fr yellow-fc">免费赠送保洁{$data.price.free_clean_numbers}次</span>
+	</div>
+	{/notempty}
+
+	<div class="dingdan_bj">
+		<span class="gray-fc">支付方式</span>
+		<span class="fr">微信支付</span>
+	</div>
+
+
+	<input type="hidden" name="voucher_id" id="voucher_id" value="{$voucher.best.voucher_id}" />
+	<input type="hidden" name="voucher_price" id="voucher_price" value="{$voucher.best.price_discount}" />
+	<input type="hidden" name="room_price" id="room_price" value="{$data.price.room_amount|money_formater}" />
+
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<a href="#" class="btn_big_orange" id="submit_order">确定</a>
+
+
+
+<div id="voucherPopover" class="mui-popover" style="width: 90%;">
+	<div class="mui-popover-arrow"></div>
+	<div class="mui-scroll-wrapper" id="wrapper">
+		<div class="mui-scroll">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a href="#" class="useVoucher" data-voucherid="0" data-price="0" >
+						<div class=" {if $voucher.best.voucher_id == 0}voucher_selected{/if}" >
+							<div>不使用优惠券</div>
+						</div>
+					</a>
+				</li>
+
+				{foreach name="voucher['list']['yes']" key="k" item="v"}
+				<li class="mui-table-view-cell">
+					<a href="#" class="useVoucher" data-voucherid="{$v['id']}" data-price="{$v['price_discount']}">
+
+						<div class="youhuijuan_use {if $voucher.best.voucher_id == $v['id']}voucher_selected{/if}" >
+							<div class="left_bj fl">
+								<div class="mt25">
+									￥<span class=" mt25">{$v.price_discount}</span></br>
+									{eq name="v['type']" value="1"}
+									<span class="fs-14">民宿</span>
+									{else/}
+									<span class="fs-14">保洁</span>
+									{/eq}
+								</div>
+							</div>
+							<div class="right_txt">
+								{if $v['start_time'] && $v['end_time']}
+								<h3>有效期：{:date('Y-m-d',$v['start_time'])} - {:date('Y-m-d',$v['end_time'])}</h3>
+								{else/}
+								<h3>有效期：无限制</h3>
+								{/if}
+								<p>每次预定使用一张,限本人使用</p>
+								{if $v['price_over'] gt 0}
+								<p>消费额满 {$v['price_over']} 使用</p>
+								{/if}
+								<p>最终解释权归橙子民宿所有</p>
+							</div>
+						</div>
+
+					</a>
+				</li>
+				{/foreach}
+			</ul>
+		</div>
+	</div>
+</div>
+
+{/block}
+{block name="foot"}{/block}
+{block name="js"}
+	<script type="text/javascript">
+
+		$(function(){
+
+            mui.ready(function () {
+                mui('.mui-scroll-wrapper').scroll();
+            });
+
+
+
+		    var total_price = {$data['price']['order_original_total']};
+            var voucher_price = {$voucher['best']['price_discount']};
+
+            count();
+
+            function count() {
+                var show_total = total_price - voucher_price;
+                if (show_total < 0) {
+                    show_total = 0;
+                }
+                show_total += +{$data['price']['deposit_amount']};
+
+                $("#price_total").text("￥" + show_total.toFixed(2) + "元");
+            }
+
+            $('#submit_order').click(function(){
+                var begin_date = "{$data['date']['begin']}";
+                var end_date = "{$data['date']['end']}";
+                var bnb_id = "{$data['bnb']['id']}";
+                var people_number = "{$data['bnb']['order_room_people']}";
+                var voucher_id = $("#voucher_id").val();
+
+                if(begin_date && end_date && bnb_id && people_number){
+                    $.ajax({
+                        url:"{:url('index/bnb/saveOrder')}",
+                        type:'post',
+                        data:{begin_date:begin_date,end_date:end_date,bnb_id:bnb_id,people_number:people_number,voucher:voucher_id},
+                        dataType:'json',
+                        success:function(result){
+                            if(result.code == 1){
+                                window.location.href = "{:url('index/order/index')}";
+                            }else{
+                                mui.alert(result.msg,'错误提示');
+                            }
+                        }
+                    });
+                }
+            });
+
+            // 设置优惠券
+            $(document).on("click", ".useVoucher", function (e) {
+                e.preventDefault();
+
+                var v = $(this);
+
+                $(".youhuijuan_use").each(function(){
+                    $(this).removeClass("voucher_selected");
+				});
+
+                var s = v.find(".youhuijuan_use");
+
+                var price_discount = 0;
+                var voucher_id = 0;
+				var voucher_text = "不使用优惠券";
+
+                if (s.length == 1)
+				{
+                    v.find(".youhuijuan_use").addClass("voucher_selected");
+                    price_discount = v.attr('data-price');
+                    voucher_id = v.attr('data-voucherid');
+
+                    var room_price = $("#room_price").val();
+                    if (room_price < price_discount)
+					{
+					    price_discount = room_price;
+					}
+                    voucher_text = "-￥"+price_discount;
+				}
+
+                voucher_price = price_discount;
+
+                $("#voucher_id").val(voucher_id);
+				$("#voucher_price").val(price_discount);
+				$("#voucher_text").text(voucher_text);
+
+				count();
+
+                mui('#voucherPopover').popover('toggle');
+
+            });
+
+
+		});
+
+	</script>
+{/block}

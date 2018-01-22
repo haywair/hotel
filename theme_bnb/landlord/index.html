@@ -1,0 +1,77 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	{if !isset($bnb_name) and $signupData}
+		{foreach name="signupData" item="v"}
+		<div class="fangdong_list_bj">
+			<a href="#">
+				<div class="wanshan">
+					{if $v['status'] eq '1'}
+						<img src="/bnb_imgs/icon_18.png">
+					{/if}
+				</div>
+				<div class="img_left">
+                    {notempty name="v['bnb_img']"}
+                        <img src="{$path.bnb_thumb_path}{$v.bnb_img}" >
+                    {/notempty}
+                </div>
+				<div class="txt_right">
+					<h3>{$v.name}</h3>
+					<p class="yellow-fc">房东:{$v.landlord}{notempty name="v['manage_name']"} | 管家:{$v.manage_name}{/notempty}</p>
+				</div>
+			</a>
+		</div>
+		{/foreach}
+	{/if}
+	{notempty name="bnbData"}
+		{foreach name="bnbData" item="v"}
+		<div class="fangdong_list_bj">
+			<a href="#">
+			<div class="wanshan"></div>
+			<div class="img_left">
+				<img src="{$path.bnb_thumb_path}{$v.bnb_image}">
+			</div>
+			<div class="txt_right">
+				<h3>{$v.name}</h3>
+				<p class="yellow-fc">房东:{$v.landlord_name}{notempty name="v['manager_name']"} | 管家:{$v.manager_name}{/notempty}</p>
+				<a href="{:url('index/order/bnbOrder',['bnb_id'=>$v['id']])}" class="btn_gray_yuan1">订购记录</a>
+			</div>
+			</a>
+		</div>
+		{/foreach}
+	{/notempty}
+	{if isset($bnb_name) && !$bnbData}
+		<p class="tc"><img src="/bnb_imgs/img_03.png"></p>
+	{/if}
+	<!--添加-->
+	<a href="{:url('index/landlord/addBnb')}" class="fangdong_btn_tianjia">+</a>
+	<!--添加/-->
+	
+	<!--占位-->
+	<div style="height: 44px;" id="stagePosition"></div>
+	<!--占位/-->
+{/block}
+{block name="js"}
+<script>
+	//设置房源状态
+	$('.offOrline').click(function(){
+		var data_id = $(this).attr('data-id');
+		var data_state = $(this).attr('data-state');
+		if(data_id && data_state)
+		$.ajax({
+			url:"{:url('index/landlord/setBnbState')}",
+			type:'post',
+			data:{id:data_id,status:data_state},
+			dataType:'json',
+			success:function(result){
+				mui.toast(result.msg);
+				if(result.code == 1){
+					var timeout = setTimeout(function(){
+						window.location.reload();
+					},3000);
+				}
+			}
+		})
+	});
+</script>
+{/block}
+

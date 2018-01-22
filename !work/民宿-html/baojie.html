@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>成为保洁</title>
+		<!--mui通用-->
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<!--私有-->
+		<link href="css/style.css" rel="stylesheet" />
+	</head>
+		<style>
+			.mui-btn {
+				display: block;
+				width: 120px;
+				margin: 10px auto;
+			}
+			
+			#info {
+				padding: 20px 10px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		
+		<ul class="mui-table-view">
+			<li class="mui-table-view-cell">
+				<div class="mui-input-row">
+					<label style="padding: 11px 0;">姓名</label>
+					<input type="text" placeholder="中文名" style="text-align: right;">
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<div class="mui-input-row">
+					<label style="padding: 11px 0;">手机</label>
+					<input type="text" placeholder="请输入11位手机号码" style="text-align: right;">
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<div class="mui-input-row">
+					<label style="padding: 11px 0;">年龄</label>
+					<input type="text" placeholder="请填写" style="text-align: right;">
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<div class="mui-input-row">
+					<label style="padding: 11px 0;">性别</label>
+					<input type="text" placeholder="请填写" style="text-align: right;">
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				<div class="mui-input-row">
+					<label style="padding: 11px 0;">地址</label>
+					<input type="text" placeholder="市/街道" style="text-align: right;">
+				</div>
+			</li>
+		</ul>
+		<h3 class="fs-18 gray-fc2 mt20"><img src="img/logo.png" class="fangdong_img ml15 mr5">感谢您对橙子民宿关注：</h3>
+		<div class="fangdong_box">
+			<p>我们的要求，年龄30-55，无性别限制，每日12-15点有自由时间。</p>
+			<p>您提交信息后，客服人员会电话通知您面试。</p>
+			<p>请不要相信邮件等其它信息。</p>
+		</div>
+
+		<!--占位-->
+		<div style="height: 44px;"></div>
+		<!--占位/-->
+
+
+<a href="#" id='alertBtn' class="btn_big_orange">注册成为房东</a>
+
+		<!--mui通用-->
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+			document.getElementById("alertBtn").addEventListener('tap', function() {
+				mui.alert('请等待我们客服人员的面试通知！', '欢迎您的加入！', function() {
+				});
+			});
+		</script>
+	</body>
+
+</html>

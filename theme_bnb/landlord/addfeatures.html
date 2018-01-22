@@ -1,0 +1,71 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row mui-checkbox">
+				<label style="width: 100%;">冰箱</label>
+				<input name="checkbox1" value="冰箱" type="checkbox">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row mui-checkbox">
+				<label style="width: 100%;">空调</label>
+				<input name="checkbox1" value="空调" type="checkbox">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row mui-checkbox">
+				<label style="width: 100%;">电视</label>
+				<input name="checkbox1" value="电视" type="checkbox">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row mui-checkbox">
+				<label style="width: 100%;">热水器</label>
+				<input name="checkbox1" value="热水器" type="checkbox">
+			</div>
+		</li>
+		<li class="mui-table-view-cell">
+			<div class="mui-input-row mui-checkbox">
+				<label style="width: 100%;">宽带</label>
+				<input name="checkbox1" value="宽带" type="checkbox">
+			</div>
+		</li>
+	</ul>
+
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<a href="#" class="btn_big_orange">保存</a>
+{/block}
+{block name="foot"}{/block}
+{block name="js"}
+<script>
+	$('.btn_big_orange').click(function(){
+		var keys = "{$typeKeys['features']}";
+		var features = new Array();
+		$("input:checkbox[name='checkbox1']:checked").each(function(item){
+			features[item] = $(this).val();
+		})
+		if(!features.length){
+			mui.alert("请选择房间内可提供的设施",'错误提示');
+			return false;
+		}
+		features_text = features.join(',');
+		$.ajax({
+			url:"{:url('index/landlord/addStepOne')}",
+			type:'post',
+			data:{keys:keys,val:features_text},
+			dataType:'json',
+			success:function(result){
+				if(result.code == 1){
+					window.location.href = "{:url('index/landlord/addBnb')}?type=add";
+				}else{
+					mui.alert("设置失败",'错误提示');
+				}
+			}
+		});
+
+	});
+</script>
+{/block}

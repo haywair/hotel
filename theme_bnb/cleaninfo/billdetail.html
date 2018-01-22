@@ -1,0 +1,26 @@
+{extend name="./layout/site_layout" /}
+{block name="content"}
+	<ul class="mui-table-view fs-15">
+		{foreach name="data" item="v"}
+		<li class="mui-table-view-cell">
+			<div class="pt10 pb10">
+				{$v.bill_date} 保洁收入
+				<span class="fr pr20 red-fc">+ {$v.totalmoney}</span>
+			</div>
+		</li>
+		{/foreach}
+	</ul>
+
+	<!--占位-->
+	<div style="height: 44px;"></div>
+	<!--占位/-->
+	<div class="shouyi_box tr ">
+		{if $extraMoney gt 0}
+			<span class="fs-13 gray-fc1 pr20">现有收益<span class="fs-16 fw black-fc ml5">￥{$extraMoney}</span></span>
+		{else /}
+			<span class="fs-13 gray-fc1 pr20">暂无收益</span>
+		{/if}
+	</div>
+{/block}
+{block name="foot"}{/block}
+

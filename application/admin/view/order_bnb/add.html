@@ -1,0 +1,123 @@
+<div class="panel panel-default panel-intro">
+    {:build_heading()}
+    <div class="panel-body">
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade active in" id="one">
+                <div class="widget-body no-padding">
+                    <div id="toolbar" class="toolbar">
+                        {:build_toolbar('refresh')}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="bnb-add">
+    <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="" >
+        <div class="form-group">
+            <label for="c-weigh" class="control-label col-xs-12 col-sm-2">{:__('Weigh')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-weigh" data-rule="required" class="form-control" name="row[weigh]" type="number" {notempty  name="row['weigh']"}value="{$row.weigh}"{else/}value="0"{/notempty}>
+            </div>
+        </div>
+        {notempty name="row['order_sn']"}
+        <input type="hidden" name="row[id]" value="{$row.id}">
+        <input type="hidden" name="row[order_sn]" value="{$row.order_sn}">
+        {/notempty}
+        <div class="form-group">
+            <label for="province" class="control-label col-xs-12 col-sm-2">{:__('省')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <select name='row[area_province_code]'  data-rule="required"  id="province" class="form-control ">
+                    <option value=''>请选择省</option>
+                    {foreach name="provinces" item="v" key="k"}
+                    <option value='{$k}'>{$v}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="city" class="control-label col-xs-12 col-sm-2">{:__('市')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <select name='row[cityCode]'  data-rule="required" id="city" class="form-control">
+                    <option value=''>请选择城市</option>
+                    {foreach name="citys" item="v" key="k"}
+                    <option value='{$k}' >{$v}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group bnb-area" style="display:none;">
+            <label for="bnb_id" class="control-label col-xs-12 col-sm-2">{:__('选择民宿')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <select name='row[bnb_id]'   data-rule="required" id="bnb_id" class="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-in_date" class="control-label col-xs-12 col-sm-2">{:__('入住日期')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-in_date" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[in_date]" type="text" {notempty name="row['in_date']"}value="{$row.in_date}"{else/}value="{:date('Y-m-d')}"{/notempty}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-out_date" class="control-label col-xs-12 col-sm-2">{:__('离开日期')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-out_date" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[out_date]" type="text" {notempty name="row['out_date']"}value="{$row.out_date}"{else/}value="{:date('Y-m-d')}"{/notempty}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-order_time" class="control-label col-xs-12 col-sm-2">{:__('下单日期')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-order_time" data-rule="required" class="form-control datetimepicker" data-date-format="YYYY-MM-DD" data-use-current="true" name="row[order_time]" type="text" {notempty name="row['order_time']"}value="{:date('Y-m-d',$row['order_time'])}"{else/}value="{:date('Y-m-d')}"{/notempty}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-order_total" class="control-label col-xs-12 col-sm-2">{:__('订单金额')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-order_total" data-rule="required" class="form-control" name="row[order_total]"  type="number" {notempty name="row['order_total']"}value="{$row.order_total}"{/notempty}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-people_number" class="control-label col-xs-12 col-sm-2">{:__('入住人数')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-people_number" data-rule="required" class="form-control" name="row[people_numbers]"  type="number" {notempty name="row['people_numbers']"}value="{$row.people_numbers}"{/notempty}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c- contact_name" class="control-label col-xs-12 col-sm-2">{:__('联系人')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c- contact_name" data-rule="required" class="form-control" name="row[contact_name]" type="text" {notempty name="row['contact_name']"}value="{$row.contact_name}"{/notempty}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-contact_mobile" class="control-label col-xs-12 col-sm-2">{:__('联系电话')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-contact_mobile" data-rule="required,mobile" class="form-control" name="row[contact_mobile]"  type="number" {notempty name="row['contact_mobile']"}value="{$row.contact_mobile}"{/notempty}>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-replaced_source_id" class="control-label col-xs-12 col-sm-2">{:__('订单来源')}:</label>
+            <div class="col-xs-12 col-sm-8" >
+                <select name='row[replaced_source_id]' id="c-replaced_source_id" class="form-control"  data-rule="required" >
+                    {foreach name="resourceList" key="k" item="v" }
+                    <option value='{$k}' {notempty name="row['replaced_source_id']"}{eq name="row['replaced_source_id']" value="$k"}selected{/eq}{/notempty}>{$v}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="c-replace_order_sn" class="control-label col-xs-12 col-sm-2">{:__('平台单号')}:</label>
+            <div class="col-xs-12 col-sm-8">
+                <input id="c-replace_order_sn" data-rule="required" class="form-control" name="row[replaced_order_sn]"  type="text" {notempty name="row['replaced_order_sn']"}value="{$row.replaced_order_sn}"{/notempty}>
+            </div>
+        </div>
+        <div class="form-group ">
+            <label class="control-label col-xs-12 col-sm-2"></label>
+            <div class="col-xs-12 col-sm-8">
+                <button type="submit" class="btn btn-success btn-embossed disabled">{:__('OK')}</button>
+                <button type="reset" class="btn btn-default btn-embossed">{:__('Reset')}</button>
+            </div>
+        </div>
+    </form>
+    </div>
+    </div>
+</div>
